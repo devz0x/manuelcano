@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { Star, ShoppingBag } from 'lucide-react';
 import { useCartStore } from '@/lib/store';
 import { useI18n } from '@/lib/i18n';
+import { useNavigationStore } from '@/lib/navigation-store';
 import { toast } from 'sonner';
 
 interface ProductCardProps {
@@ -48,8 +49,10 @@ export function ProductCard({
   rating,
   reviewCount,
   badges,
+  slug,
 }: ProductCardProps) {
   const { t } = useI18n();
+  const navigate = useNavigationStore((s) => s.navigate);
   const addItem = useCartStore((state) => state.addItem);
   const openCart = useCartStore((state) => state.openCart);
 
@@ -71,7 +74,8 @@ export function ProductCard({
   const badgeList = badges ? badges.split(',').map((b) => b.trim()) : [];
   const firstBadge = badgeConfig[badgeList[0]];
 
-  const handleAddToCart = () => {
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.stopPropagation();
     addItem({
       productId: id,
       name,
@@ -83,7 +87,10 @@ export function ProductCard({
   };
 
   return (
-    <div className="group overflow-hidden rounded-lg bg-white shadow-sm transition-shadow duration-300 hover:shadow-lg">
+    <div
+      className="group cursor-pointer overflow-hidden rounded-lg bg-white shadow-sm transition-shadow duration-300 hover:shadow-lg"
+      onClick={() => navigate('product', { slug })}
+    >
       {/* Image Container */}
       <div className="relative aspect-square overflow-hidden bg-bone-cream">
         <Image

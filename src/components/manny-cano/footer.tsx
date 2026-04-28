@@ -12,6 +12,7 @@ import {
   Award,
 } from 'lucide-react';
 import { useI18n } from '@/lib/i18n';
+import { useNavigationStore } from '@/lib/navigation-store';
 import { MCLogo } from './mc-logo';
 
 /* Custom TikTok icon since lucide-react doesn't have it */
@@ -100,42 +101,81 @@ function NewsletterSection() {
 }
 
 /* ------------------------------------------------------------------ */
+/*  Footer Link                                                          */
+/* ------------------------------------------------------------------ */
+
+function FooterLink({
+  children,
+  onClick,
+}: {
+  children: React.ReactNode;
+  onClick?: () => void;
+}) {
+  return (
+    <li>
+      <button
+        onClick={onClick}
+        className="text-left text-sm text-bone-cream/60 transition-colors hover:text-white"
+      >
+        {children}
+      </button>
+    </li>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /*  Footer Component                                                    */
 /* ------------------------------------------------------------------ */
 
+const categorySlugs: Record<string, string> = {
+  'nav.gloves': 'guantes',
+  'nav.bats': 'bates',
+  'nav.catcher': 'catcher',
+  'nav.balls': 'pelotas',
+  'nav.bags': 'mochilas',
+  'nav.accessories': 'accesorios',
+};
+
 export function Footer() {
   const { t } = useI18n();
+  const navigate = useNavigationStore((s) => s.navigate);
 
-  const footerColumns = [
-    {
-      titleKey: 'footer.shop',
-      linkKeys: ['nav.gloves', 'nav.bats', 'nav.catcher', 'nav.balls', 'nav.bags', 'nav.accessories'],
-    },
-    {
-      titleKey: 'footer.brand',
-      linkKeys: ['footer.ourHistory', 'footer.athletes', 'footer.technology', 'footer.sustainability'],
-    },
-    {
-      titleKey: 'footer.support',
-      linkKeys: [
-        'footer.sizeGuide',
-        'footer.gloveCare',
-        'footer.shipping',
-        'footer.returns',
-        'footer.warranty',
-        'footer.faq',
-      ],
-    },
-    {
-      titleKey: 'footer.community',
-      linkKeys: [
-        'footer.canteraProgram',
-        'footer.sponsorship',
-        'footer.showcases',
-        'footer.blog',
-        'footer.rewards',
-      ],
-    },
+  const handleLogoClick = () => {
+    navigate('home');
+  };
+
+  const handleShopLink = (linkKey: string) => {
+    const slug = categorySlugs[linkKey];
+    if (slug) {
+      navigate('shop', { category: slug });
+    }
+  };
+
+  const handleBrandLink = (linkKey: string) => {
+    switch (linkKey) {
+      case 'footer.ourHistory':
+        navigate('about');
+        break;
+      // Other brand links don't have pages yet
+    }
+  };
+
+  const shopLinks = ['nav.gloves', 'nav.bats', 'nav.catcher', 'nav.balls', 'nav.bags', 'nav.accessories'];
+  const brandLinks = ['footer.ourHistory', 'footer.athletes', 'footer.technology', 'footer.sustainability'];
+  const supportLinks = [
+    'footer.sizeGuide',
+    'footer.gloveCare',
+    'footer.shipping',
+    'footer.returns',
+    'footer.warranty',
+    'footer.faq',
+  ];
+  const communityLinks = [
+    'footer.canteraProgram',
+    'footer.sponsorship',
+    'footer.showcases',
+    'footer.blog',
+    'footer.rewards',
   ];
 
   const trustBadgeItems = [
@@ -155,7 +195,9 @@ export function Footer() {
         <div className="mx-auto max-w-7xl">
           {/* Logo + Tagline */}
           <div className="mb-10 flex flex-col items-center gap-3 text-center md:flex-row md:text-left">
-            <MCLogo height={42} invert />
+            <button onClick={handleLogoClick} className="transition-transform hover:scale-105">
+              <MCLogo height={42} invert />
+            </button>
             <p className="text-sm text-bone-cream/60 md:ml-4">
               {t('footer.tagline')}
             </p>
@@ -163,25 +205,61 @@ export function Footer() {
 
           {/* 4-column grid */}
           <div className="grid grid-cols-2 gap-8 md:grid-cols-4 md:gap-12">
-            {footerColumns.map((col) => (
-              <div key={col.titleKey}>
-                <h3 className="mb-4 font-headline text-xs uppercase tracking-widest text-gold-glove">
-                  {t(col.titleKey)}
-                </h3>
-                <ul className="space-y-2.5">
-                  {col.linkKeys.map((linkKey) => (
-                    <li key={linkKey}>
-                      <a
-                        href="#"
-                        className="text-sm text-bone-cream/60 transition-colors hover:text-white"
-                      >
-                        {t(linkKey)}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+            {/* Shop Column */}
+            <div>
+              <h3 className="mb-4 font-headline text-xs uppercase tracking-widest text-gold-glove">
+                {t('footer.shop')}
+              </h3>
+              <ul className="space-y-2.5">
+                {shopLinks.map((linkKey) => (
+                  <FooterLink key={linkKey} onClick={() => handleShopLink(linkKey)}>
+                    {t(linkKey)}
+                  </FooterLink>
+                ))}
+              </ul>
+            </div>
+
+            {/* Brand Column */}
+            <div>
+              <h3 className="mb-4 font-headline text-xs uppercase tracking-widest text-gold-glove">
+                {t('footer.brand')}
+              </h3>
+              <ul className="space-y-2.5">
+                {brandLinks.map((linkKey) => (
+                  <FooterLink key={linkKey} onClick={() => handleBrandLink(linkKey)}>
+                    {t(linkKey)}
+                  </FooterLink>
+                ))}
+              </ul>
+            </div>
+
+            {/* Support Column */}
+            <div>
+              <h3 className="mb-4 font-headline text-xs uppercase tracking-widest text-gold-glove">
+                {t('footer.support')}
+              </h3>
+              <ul className="space-y-2.5">
+                {supportLinks.map((linkKey) => (
+                  <FooterLink key={linkKey}>
+                    {t(linkKey)}
+                  </FooterLink>
+                ))}
+              </ul>
+            </div>
+
+            {/* Community Column */}
+            <div>
+              <h3 className="mb-4 font-headline text-xs uppercase tracking-widest text-gold-glove">
+                {t('footer.community')}
+              </h3>
+              <ul className="space-y-2.5">
+                {communityLinks.map((linkKey) => (
+                  <FooterLink key={linkKey}>
+                    {t(linkKey)}
+                  </FooterLink>
+                ))}
+              </ul>
+            </div>
           </div>
 
           {/* Trust Badges */}
@@ -209,6 +287,8 @@ export function Footer() {
                 <a
                   key={social.label}
                   href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   aria-label={social.label}
                   className="flex size-9 items-center justify-center rounded-full border border-bone-cream/15 text-bone-cream/60 transition-colors hover:border-gold-glove hover:text-gold-glove"
                 >

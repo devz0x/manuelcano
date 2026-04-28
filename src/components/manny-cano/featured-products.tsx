@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { ProductCard } from './product-card';
 import { useI18n } from '@/lib/i18n';
+import { useNavigationStore } from '@/lib/navigation-store';
 
 interface Product {
   id: number;
@@ -31,12 +32,13 @@ const itemVariants = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.5, ease: 'easeOut' },
+    transition: { duration: 0.5, ease: 'easeOut' as const },
   },
 };
 
 export function FeaturedProducts() {
   const { t } = useI18n();
+  const navigate = useNavigationStore((s) => s.navigate);
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const ref = useRef<HTMLDivElement>(null);
@@ -121,12 +123,12 @@ export function FeaturedProducts() {
             transition={{ duration: 0.5, delay: 0.6 }}
             className="mt-12 text-center"
           >
-            <a
-              href="/tienda"
+            <button
+              onClick={() => navigate('shop')}
               className="font-headline uppercase tracking-wider text-stadium-crimson underline-offset-4 transition-colors hover:text-stadium-crimson/80 hover:underline"
             >
               {t('products.viewAll')}
-            </a>
+            </button>
           </motion.div>
         )}
       </div>

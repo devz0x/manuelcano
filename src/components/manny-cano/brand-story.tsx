@@ -3,9 +3,11 @@
 import Image from 'next/image';
 import { ArrowRight } from 'lucide-react';
 import { useI18n } from '@/lib/i18n';
+import { useNavigationStore } from '@/lib/navigation-store';
 
 export function BrandStory() {
   const { t } = useI18n();
+  const navigate = useNavigationStore((s) => s.navigate);
 
   return (
     <section className="relative w-full">
@@ -67,13 +69,13 @@ export function BrandStory() {
           </div>
 
           {/* CTA */}
-          <a
-            href="#"
+          <button
+            onClick={() => navigate('about')}
             className="mt-10 inline-flex items-center gap-2 font-headline uppercase tracking-wider text-diamond-navy transition-colors hover:text-stadium-crimson"
           >
             {t('story.cta')}
             <ArrowRight className="h-4 w-4" />
-          </a>
+          </button>
         </div>
       </div>
     </section>

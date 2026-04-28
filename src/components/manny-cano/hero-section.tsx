@@ -3,9 +3,11 @@
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { useI18n } from '@/lib/i18n';
+import { useNavigationStore } from '@/lib/navigation-store';
 
 export function HeroSection() {
   const { t } = useI18n();
+  const navigate = useNavigationStore((s) => s.navigate);
 
   return (
     <section className="relative flex min-h-screen items-center justify-center overflow-hidden">
@@ -61,12 +63,12 @@ export function HeroSection() {
           transition={{ duration: 0.8, delay: 0.6 }}
           className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row"
         >
-          <a
-            href="#productos"
+          <button
+            onClick={() => navigate('shop')}
             className="bg-stadium-crimson px-8 py-3 font-headline uppercase tracking-wider text-white transition-colors hover:bg-stadium-crimson/90"
           >
             {t('hero.cta1')}
-          </a>
+          </button>
           <a
             href="#custom"
             className="border-2 border-white/50 px-8 py-3 font-headline uppercase tracking-wider text-white transition-colors hover:border-white"

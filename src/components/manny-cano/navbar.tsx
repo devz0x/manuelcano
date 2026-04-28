@@ -25,6 +25,7 @@ import {
 import { Separator } from '@/components/ui/separator';
 import { useCartStore } from '@/lib/store';
 import { useI18n } from '@/lib/i18n';
+import { useNavigationStore } from '@/lib/navigation-store';
 import { MCLogo } from './mc-logo';
 
 /* ------------------------------------------------------------------ */
@@ -38,12 +39,14 @@ interface MegaMenuColumn {
 
 interface MegaMenuData {
   labelKey: string;
+  slug: string;
   columns: MegaMenuColumn[];
 }
 
 const megaMenuData: MegaMenuData[] = [
   {
     labelKey: 'nav.gloves',
+    slug: 'guantes',
     columns: [
       {
         titleKey: 'nav.byPosition',
@@ -57,6 +60,7 @@ const megaMenuData: MegaMenuData[] = [
   },
   {
     labelKey: 'nav.bats',
+    slug: 'bates',
     columns: [
       {
         titleKey: 'nav.byMaterial',
@@ -70,6 +74,7 @@ const megaMenuData: MegaMenuData[] = [
   },
   {
     labelKey: 'nav.catcher',
+    slug: 'catcher',
     columns: [
       { titleKey: 'nav.completeSets', linkKeys: ['nav.proSet', 'nav.canteraSet'] },
       {
@@ -80,6 +85,7 @@ const megaMenuData: MegaMenuData[] = [
   },
   {
     labelKey: 'nav.balls',
+    slug: 'pelotas',
     columns: [
       {
         titleKey: 'nav.byUse',
@@ -90,6 +96,7 @@ const megaMenuData: MegaMenuData[] = [
   },
   {
     labelKey: 'nav.bags',
+    slug: 'mochilas',
     columns: [
       {
         titleKey: 'nav.byType',
@@ -99,6 +106,7 @@ const megaMenuData: MegaMenuData[] = [
   },
   {
     labelKey: 'nav.accessories',
+    slug: 'accesorios',
     columns: [
       { titleKey: 'nav.batting', linkKeys: ['nav.battingGloves', 'nav.batWeights'] },
       { titleKey: 'nav.care', linkKeys: ['nav.leatherOil', 'nav.conditioner', 'nav.brush'] },
@@ -111,8 +119,13 @@ const megaMenuData: MegaMenuData[] = [
 /*  Navbar Component                                                    */
 /* ------------------------------------------------------------------ */
 
-export function Navbar() {
+interface NavbarProps {
+  onSearchOpen?: () => void;
+}
+
+export function Navbar({ onSearchOpen }: NavbarProps) {
   const { t } = useI18n();
+  const navigate = useNavigationStore((s) => s.navigate);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const menuTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -140,17 +153,27 @@ export function Navbar() {
     };
   }, []);
 
+  const handleCategoryClick = (slug: string) => {
+    setActiveMenu(null);
+    navigate('shop', { category: slug });
+  };
+
+  const handleLogoClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    navigate('home');
+  };
+
   return (
     <>
       <nav className="sticky top-0 z-40 bg-white shadow-sm">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 lg:px-8">
           {/* Left: Logo */}
-          <a href="/" className="flex items-center group">
+          <button onClick={handleLogoClick} className="flex items-center group">
             <MCLogo
               height={38}
               className="transition-transform group-hover:scale-105"
             />
-          </a>
+          </button>
 
           {/* Center: Desktop Nav */}
           <div className="hidden lg:block" onMouseLeave={handleMouseLeave}>
@@ -183,6 +206,13 @@ export function Navbar() {
                       onMouseLeave={handleMouseLeave}
                     >
                       <div className="w-[560px] rounded-lg border border-bone-cream bg-white p-6 shadow-xl">
+                        {/* View All link at top */}
+                        <button
+                          onClick={() => handleCategoryClick(item.slug)}
+                          className="mb-4 block text-xs font-semibold uppercase tracking-widest text-stadium-crimson transition-colors hover:text-stadium-crimson/80"
+                        >
+                          {t('products.viewAll')} →
+                        </button>
                         <div className="grid grid-cols-2 gap-x-8 gap-y-4">
                           {item.columns.map((col) => (
                             <div key={col.titleKey}>
@@ -192,12 +222,12 @@ export function Navbar() {
                               <ul className="space-y-1.5">
                                 {col.linkKeys.map((linkKey) => (
                                   <li key={linkKey}>
-                                    <a
-                                      href="#"
-                                      className="block text-sm text-dugout-charcoal transition-colors hover:text-stadium-crimson"
+                                    <button
+                                      onClick={() => handleCategoryClick(item.slug)}
+                                      className="block text-left text-sm text-dugout-charcoal transition-colors hover:text-stadium-crimson"
                                     >
                                       {t(linkKey)}
-                                    </a>
+                                    </button>
                                   </li>
                                 ))}
                               </ul>
@@ -219,6 +249,7 @@ export function Navbar() {
               size="icon"
               className="text-dugout-charcoal hover:text-stadium-crimson"
               aria-label={t('mobile.search')}
+              onClick={() => onSearchOpen?.()}
             >
               <Search className="size-5" />
             </Button>
@@ -280,7 +311,10 @@ export function Navbar() {
             <Accordion type="single" collapsible className="w-full">
               {megaMenuData.map((item) => (
                 <AccordionItem key={item.labelKey} value={item.labelKey}>
-                  <AccordionTrigger className="font-headline text-sm uppercase tracking-wide text-dugout-charcoal hover:text-stadium-crimson hover:no-underline">
+                  <AccordionTrigger
+                    className="font-headline text-sm uppercase tracking-wide text-dugout-charcoal hover:text-stadium-crimson hover:no-underline"
+                    onClick={() => handleCategoryClick(item.slug)}
+                  >
                     {t(item.labelKey)}
                   </AccordionTrigger>
                   <AccordionContent>
@@ -292,13 +326,15 @@ export function Navbar() {
                         <ul className="space-y-1.5 pl-1">
                           {col.linkKeys.map((linkKey) => (
                             <li key={linkKey}>
-                              <a
-                                href="#"
-                                className="block text-sm text-dugout-charcoal transition-colors hover:text-stadium-crimson"
-                                onClick={() => setMobileMenuOpen(false)}
+                              <button
+                                onClick={() => {
+                                  setMobileMenuOpen(false);
+                                  handleCategoryClick(item.slug);
+                                }}
+                                className="block text-left text-sm text-dugout-charcoal transition-colors hover:text-stadium-crimson"
                               >
                                 {t(linkKey)}
-                              </a>
+                              </button>
                             </li>
                           ))}
                         </ul>
@@ -311,28 +347,33 @@ export function Navbar() {
 
             <Separator className="my-4 bg-bone-cream" />
 
-            <div className="flex items-center gap-4 px-1">
-              <a
-                href="#"
+            <div className="flex flex-col gap-3 px-1">
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  navigate('about');
+                }}
                 className="flex items-center gap-2 text-sm text-dugout-charcoal transition-colors hover:text-stadium-crimson"
               >
                 <User className="size-4" />
-                {t('mobile.account')}
-              </a>
-              <a
-                href="#"
+                {t('footer.ourHistory')}
+              </button>
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onSearchOpen?.();
+                }}
                 className="flex items-center gap-2 text-sm text-dugout-charcoal transition-colors hover:text-stadium-crimson"
               >
                 <Search className="size-4" />
                 {t('mobile.search')}
-              </a>
-              <a
-                href="#"
-                className="flex items-center gap-2 text-sm text-dugout-charcoal transition-colors hover:text-stadium-crimson"
+              </button>
+              <button
                 onClick={() => {
                   setMobileMenuOpen(false);
-                  openCart();
+                  navigate('cart');
                 }}
+                className="flex items-center gap-2 text-sm text-dugout-charcoal transition-colors hover:text-stadium-crimson"
               >
                 <ShoppingBag className="size-4" />
                 {t('mobile.cart')}
@@ -341,7 +382,7 @@ export function Navbar() {
                     {itemCount()}
                   </Badge>
                 )}
-              </a>
+              </button>
             </div>
           </div>
         </SheetContent>

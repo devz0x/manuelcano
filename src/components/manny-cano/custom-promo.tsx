@@ -3,9 +3,11 @@
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
 import { useI18n } from '@/lib/i18n';
+import { useNavigationStore } from '@/lib/navigation-store';
 
 export function CustomPromo() {
   const { t } = useI18n();
+  const navigate = useNavigationStore((s) => s.navigate);
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
 
@@ -30,7 +32,7 @@ export function CustomPromo() {
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
-        transition={{ duration: 0.8, ease: 'easeOut' }}
+        transition={{ duration: 0.8, ease: 'easeOut' as const }}
         className="relative z-10 mx-auto max-w-3xl px-6 py-20 text-center"
       >
         {/* Label */}
@@ -54,14 +56,14 @@ export function CustomPromo() {
         </p>
 
         {/* CTA Button */}
-        <motion.a
-          href="#"
+        <motion.button
+          onClick={() => navigate('shop')}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           className="mt-8 inline-block bg-stadium-crimson px-10 py-4 font-headline uppercase tracking-wider text-white transition-colors hover:bg-stadium-crimson/90"
         >
           {t('custom.cta')}
-        </motion.a>
+        </motion.button>
       </motion.div>
     </section>
   );
