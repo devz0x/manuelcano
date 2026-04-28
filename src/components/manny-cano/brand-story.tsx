@@ -15,8 +15,8 @@ export function BrandStory() {
         {/* Image - Left (60%) */}
         <div className="relative w-full lg:w-[60%] min-h-[400px] lg:min-h-[600px]">
           <Image
-            src="/img/story/sandlot-santo-domingo.jpg"
-            alt="Campo de béisbol en Santo Domingo"
+            src="/img/products/mc-gloves-collection-turf.jpg"
+            alt="MANNY CANÓ glove collection on the field"
             fill
             className="object-cover rounded-none lg:rounded-l-lg shadow-lg"
             sizes="(max-width: 1024px) 100vw, 60vw"

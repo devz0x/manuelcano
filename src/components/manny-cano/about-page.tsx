@@ -287,7 +287,7 @@ export function AboutPage() {
       {/* ============================================================ */}
       <section className="relative flex min-h-[60vh] items-center justify-center overflow-hidden md:min-h-[70vh]">
         <Image
-          src="/img/about/workshop-hero.jpg"
+          src="/img/products/mc-gloves-collection-flat.jpg"
           alt={t('about.hero.imageAlt')}
           fill
           className="object-cover"
@@ -334,7 +334,7 @@ export function AboutPage() {
           {/* Left Image */}
           <div className="relative w-full min-h-[350px] lg:w-[50%] lg:min-h-[550px]">
             <Image
-              src="/img/about/sandlot-heritage.jpg"
+              src="/img/products/mc-gloves-pair-grass.jpg"
               alt={t('about.mission.imageAlt')}
               fill
               className="object-cover"
@@ -439,7 +439,7 @@ export function AboutPage() {
       {/* ============================================================ */}
       <AnimatedSection className="relative overflow-hidden py-20 px-4 md:py-28">
         <Image
-          src="/img/about/leather-detail.jpg"
+          src="/img/products/mc-glove-main.jpg"
           alt={t('about.craft.imageAlt')}
           fill
           className="object-cover"
@@ -506,7 +506,7 @@ export function AboutPage() {
             {/* Team Photo */}
             <FadeUp className="relative h-[340px] w-full shrink-0 overflow-hidden rounded-xl shadow-lg md:h-[420px] md:w-[45%]">
               <Image
-                src="/img/about/team-founders.jpg"
+                src="/img/products/mc-catcher-mitt-blue.jpg"
                 alt={t('about.team.imageAlt')}
                 fill
                 className="object-cover"

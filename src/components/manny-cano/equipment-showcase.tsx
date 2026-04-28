@@ -8,22 +8,32 @@ import { useNavigationStore } from '@/lib/navigation-store';
 
 const equipmentItems = [
   {
-    image: '/img/products/mc-backpack.png',
+    image: '/img/products/mc-glove-main.jpg',
+    labelKey: 'nav.gloves',
+    slug: 'guantes',
+  },
+  {
+    image: '/img/products/mc-backpack.jpg',
     labelKey: 'nav.bags',
     slug: 'mochilas',
   },
   {
-    image: '/img/products/mc-cleat-black.png',
+    image: '/img/products/mc-cleat-black.jpg',
     labelKey: 'nav.accessories',
     slug: 'accesorios',
   },
   {
-    image: '/img/products/mc-backpack-red.png',
+    image: '/img/products/mc-backpack-red.jpg',
     labelKey: 'nav.bags',
     slug: 'mochilas',
   },
   {
-    image: '/img/products/mc-backpack-black.png',
+    image: '/img/products/mc-catcher-mitt-blue.jpg',
+    labelKey: 'nav.catcher',
+    slug: 'catcher',
+  },
+  {
+    image: '/img/products/mc-backpack-black.jpg',
     labelKey: 'nav.bags',
     slug: 'mochilas',
   },
@@ -33,7 +43,7 @@ const containerVariants = {
   hidden: {},
   visible: {
     transition: {
-      staggerChildren: 0.1,
+      staggerChildren: 0.08,
     },
   },
 };
@@ -66,13 +76,13 @@ export function EquipmentShowcase() {
           </h2>
         </div>
 
-        {/* Product Showcase Strip */}
+        {/* Product Showcase Strip — 6 items: 3x2 on mobile, 6x1 on desktop */}
         <motion.div
           ref={ref}
           variants={containerVariants}
           initial="hidden"
           animate={isInView ? 'visible' : 'hidden'}
-          className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6"
+          className="grid grid-cols-3 gap-3 md:grid-cols-6 md:gap-4"
         >
           {equipmentItems.map((item, index) => (
             <motion.button
@@ -86,13 +96,13 @@ export function EquipmentShowcase() {
                 alt={t(item.labelKey)}
                 fill
                 className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
-                sizes="(max-width: 768px) 50vw, 25vw"
+                sizes="(max-width: 768px) 33vw, 16vw"
               />
               {/* Hover overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-diamond-navy/60 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+              <div className="absolute inset-0 bg-gradient-to-t from-diamond-navy/70 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
               <div className="absolute inset-x-0 bottom-0 translate-y-4 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
-                <span className="block bg-stadium-crimson px-4 py-2 text-center font-headline text-xs uppercase tracking-wider text-white">
-                  {t('products.viewAll')}
+                <span className="block bg-stadium-crimson px-3 py-1.5 text-center font-headline text-[10px] uppercase tracking-wider text-white md:px-4 md:py-2 md:text-xs">
+                  {t(item.labelKey)}
                 </span>
               </div>
             </motion.button>
