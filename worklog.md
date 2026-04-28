@@ -34,3 +34,36 @@ Stage Summary:
 - Dev server: compiled clean, all routes 200 OK
 - 25+ component files in total
 - 25 AI-generated images across all sections
+
+---
+Task ID: 2
+Agent: Main Orchestrator
+Task: Integrate real uploaded product photos and logo across the entire site
+
+Work Log:
+- Analyzed all 11 uploaded images using VLM to identify content (logo, red backpack, black backpack, 5 navy backpack angles, black cleat, logo PNG)
+- Copied high-res logo (Logo hi res.jpg) to /public/img/brand/logo.jpg and logo PNG to /public/img/brand/logo.png
+- Replaced all brand product images: backpack-red.png, backpack-black.png, backpack-navy.png, cleat-black.png
+- Copied navy backpack multi-angle photos to /public/img/products/ (mc-backpack.png, mc-backpack-angle2.png, mc-backpack-detail.png, mc-backpack-side.png, mc-backpack-open.png, mc-backpack-back.png)
+- Copied color variant backpacks to /public/img/products/ (mc-backpack-red.png, mc-backpack-black.png)
+- Copied cleat photo to /public/img/products/mc-cleat-black.png
+- Updated Mochilas category image (/public/img/cat/mochilas.jpg) with real navy backpack photo
+- Expanded product API (src/app/api/products/route.ts) from 6 to 9 products:
+  - Added Product 7: MC Mochila Pro Bat Pack - Red ($109.99)
+  - Added Product 8: MC Mochila Pro Bat Pack - Black ($109.99)
+  - Added Product 9: MC Cleat Pro Black ($129.99, was $159.99)
+- Added `gallery` JSON field to all products for multi-image support
+- Navy backpack product now has 5 gallery images (front, angle2, detail, side, open)
+- Updated Product Detail page (product-page.tsx) to use gallery field instead of hardcoded paths
+- Updated Featured Products section to show max 8 products (sorted by bestseller/rating)
+- Created new Equipment Showcase component (equipment-showcase.tsx) displaying real product photos in a dark navy strip
+- Added Equipment Showcase section between Hero and Category Grid on homepage
+
+Stage Summary:
+- All 11 uploaded images now integrated across the site
+- 9 total products in catalog (3 backpack colors, 2 bats, 1 glove, 1 catcher set, 1 balls, 1 cleat)
+- Product detail pages support multi-image galleries from API
+- New Equipment Showcase section on homepage features real navy backpack, red backpack, black backpack, and cleat photos
+- Category "Mochilas" image now shows real product photo
+- ESLint: 0 errors, 0 warnings
+- Dev server: compiled clean, all routes 200 OK

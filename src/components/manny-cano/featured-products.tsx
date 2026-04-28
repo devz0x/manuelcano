@@ -49,7 +49,17 @@ export function FeaturedProducts() {
       try {
         const res = await fetch('/api/products');
         const data = await res.json();
-        setProducts(data.products || []);
+        // Show up to 8 featured products on homepage (prioritize bestsellers)
+        const all = data.products || [];
+        const featured = all
+          .sort((a: Product, b: Product) => {
+            const aBs = a.badges?.includes('bestseller') ? 1 : 0;
+            const bBs = b.badges?.includes('bestseller') ? 1 : 0;
+            if (bBs !== aBs) return bBs - aBs;
+            return b.rating - a.rating;
+          })
+          .slice(0, 8);
+        setProducts(featured);
       } catch (error) {
         console.error('Error fetching products:', error);
       } finally {

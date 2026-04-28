@@ -9,6 +9,7 @@ import { Footer } from '@/components/manny-cano/footer';
 
 /* Homepage sections */
 import { HeroSection } from '@/components/manny-cano/hero-section';
+import { EquipmentShowcase } from '@/components/manny-cano/equipment-showcase';
 import { CategoryGrid } from '@/components/manny-cano/category-grid';
 import { FeaturedProducts } from '@/components/manny-cano/featured-products';
 import { BrandStory } from '@/components/manny-cano/brand-story';
@@ -30,6 +31,7 @@ function HomePage() {
   return (
     <>
       <HeroSection />
+      <EquipmentShowcase />
       <CategoryGrid />
       <FeaturedProducts />
       <BrandStory />

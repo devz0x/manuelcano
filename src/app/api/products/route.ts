@@ -11,6 +11,7 @@ interface Product {
   categoryId: number;
   collectionId: number | null;
   images: string;
+  gallery: string;
   specs: string;
   stock: number;
   rating: number;
@@ -32,6 +33,10 @@ const products: Product[] = [
     categoryId: 1,
     collectionId: 1,
     images: "/img/products/mc-pro-glove-detail.jpg",
+    gallery: JSON.stringify([
+      "/img/products/mc-pro-glove-detail.jpg",
+      "/img/products/mc-pro-glove-angle2.jpg",
+    ]),
     specs: JSON.stringify({
       material: "Premium roebuck leather",
       position: "Infield",
@@ -57,6 +62,10 @@ const products: Product[] = [
     categoryId: 2,
     collectionId: 1,
     images: "/img/products/mc-pro-bat-271.jpg",
+    gallery: JSON.stringify([
+      "/img/products/mc-pro-bat-271.jpg",
+      "/img/products/mc-pro-bat-detail2.jpg",
+    ]),
     specs: JSON.stringify({
       material: "Northern White Ash",
       model: "271",
@@ -82,6 +91,7 @@ const products: Product[] = [
     categoryId: 2,
     collectionId: null,
     images: "/img/products/mc-cantera-bat.jpg",
+    gallery: JSON.stringify(["/img/products/mc-cantera-bat.jpg"]),
     specs: JSON.stringify({
       material: "Poplar",
       length: '30"',
@@ -106,6 +116,7 @@ const products: Product[] = [
     categoryId: 5,
     collectionId: 1,
     images: "/img/products/mc-catcher-set.jpg",
+    gallery: JSON.stringify(["/img/products/mc-catcher-set.jpg"]),
     specs: JSON.stringify({
       helmet: "Polycarbonate with acrylic visor",
       chest: "High-density PE padding",
@@ -130,6 +141,7 @@ const products: Product[] = [
     categoryId: 3,
     collectionId: null,
     images: "/img/products/mc-pelotas-pro.jpg",
+    gallery: JSON.stringify(["/img/products/mc-pelotas-pro.jpg"]),
     specs: JSON.stringify({
       quantity: "12 baseballs",
       material: "Genuine leather",
@@ -145,26 +157,114 @@ const products: Product[] = [
   },
   {
     id: 6,
-    sku: "MC-BPK-PRO",
+    sku: "MC-BPK-NAV",
     name: "MC Mochila Pro Bat Pack",
     slug: "mc-mochila-pro-bat-pack",
     description:
-      "Sports backpack with compartment for 2 bats, ventilated space for helmet and gloves, and multiple organizer pockets. Water-resistant material.",
+      "Sports backpack with compartment for 2 bats, ventilated space for helmet and gloves, and multiple organizer pockets. Water-resistant material. Available in Navy, Red, and Black.",
     price: 109.99,
     compareAtPrice: null,
     categoryId: 4,
     collectionId: null,
-    images: "/img/products/mc-backpack.jpg",
+    images: "/img/products/mc-backpack.png",
+    gallery: JSON.stringify([
+      "/img/products/mc-backpack.png",
+      "/img/products/mc-backpack-angle2.png",
+      "/img/products/mc-backpack-detail.png",
+      "/img/products/mc-backpack-side.png",
+      "/img/products/mc-backpack-open.png",
+    ]),
     specs: JSON.stringify({
       capacity: "45L",
       batSlots: 2,
       material: "600D waterproof polyester",
       compartments: 6,
       laptop: 'Up to 15.6"',
+      colors: "Navy / Red / Black",
     }),
     stock: 42,
     rating: 4.4,
     reviewCount: 78,
+    badges: "nuevo",
+    isActive: true,
+  },
+  {
+    id: 7,
+    sku: "MC-BPK-RED",
+    name: "MC Mochila Pro Bat Pack - Red",
+    slug: "mc-mochila-pro-bat-pack-red",
+    description:
+      "MANNY CANÓ sports backpack in striking red. Same Pro Bat Pack design with 2 bat compartments, ventilated pockets, and 6 organizer sections.",
+    price: 109.99,
+    compareAtPrice: null,
+    categoryId: 4,
+    collectionId: null,
+    images: "/img/products/mc-backpack-red.png",
+    gallery: JSON.stringify(["/img/products/mc-backpack-red.png"]),
+    specs: JSON.stringify({
+      capacity: "45L",
+      batSlots: 2,
+      material: "600D waterproof polyester",
+      compartments: 6,
+      laptop: 'Up to 15.6"',
+      color: "Red",
+    }),
+    stock: 28,
+    rating: 4.4,
+    reviewCount: 34,
+    badges: "nuevo",
+    isActive: true,
+  },
+  {
+    id: 8,
+    sku: "MC-BPK-BLK",
+    name: "MC Mochila Pro Bat Pack - Black",
+    slug: "mc-mochila-pro-bat-pack-black",
+    description:
+      "MANNY CANÓ sports backpack in classic black. Pro Bat Pack design with 2 bat compartments, ventilated pockets, and 6 organizer sections.",
+    price: 109.99,
+    compareAtPrice: null,
+    categoryId: 4,
+    collectionId: null,
+    images: "/img/products/mc-backpack-black.png",
+    gallery: JSON.stringify(["/img/products/mc-backpack-black.png"]),
+    specs: JSON.stringify({
+      capacity: "45L",
+      batSlots: 2,
+      material: "600D waterproof polyester",
+      compartments: 6,
+      laptop: 'Up to 15.6"',
+      color: "Black",
+    }),
+    stock: 31,
+    rating: 4.4,
+    reviewCount: 22,
+    badges: "nuevo",
+    isActive: true,
+  },
+  {
+    id: 9,
+    sku: "MC-CLT-BLK",
+    name: "MC Cleat Pro Black",
+    slug: "mc-cleat-pro-black",
+    description:
+      "Professional baseball cleat with M2 technology. Lightweight synthetic upper with reinforced toe box, metal spike configuration for maximum traction on dirt and grass.",
+    price: 129.99,
+    compareAtPrice: 159.99,
+    categoryId: 6,
+    collectionId: null,
+    images: "/img/products/mc-cleat-black.png",
+    gallery: JSON.stringify(["/img/products/mc-cleat-black.png"]),
+    specs: JSON.stringify({
+      upper: "Synthetic leather with mesh",
+      sole: "Metal spikes (9)",
+      weight: "310g",
+      closure: "Lace-up",
+      technology: "M2 Cushioning System",
+    }),
+    stock: 19,
+    rating: 4.6,
+    reviewCount: 45,
     badges: "nuevo",
     isActive: true,
   },

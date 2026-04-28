@@ -45,6 +45,7 @@ interface Product {
   categoryId: number;
   collectionId: number | null;
   images: string;
+  gallery: string;
   specs: string;
   stock: number;
   rating: number;
@@ -81,24 +82,13 @@ function getProductType(product: Product): 'glove' | 'bat' | 'other' {
 }
 
 function getImages(product: Product): string[] {
-  const type = getProductType(product);
-  const main = product.images;
-
-  if (type === 'glove' && product.slug.includes('pro')) {
-    return [
-      main,
-      '/img/products/mc-pro-glove-detail.jpg',
-      '/img/products/mc-pro-glove-angle2.jpg',
-    ];
+  try {
+    const gallery: string[] = JSON.parse(product.gallery);
+    if (gallery.length > 0) return gallery;
+  } catch {
+    // fallback to single image
   }
-  if (type === 'bat') {
-    return [
-      main,
-      '/img/products/mc-pro-bat-271.jpg',
-      '/img/products/mc-pro-bat-detail2.jpg',
-    ];
-  }
-  return [main];
+  return [product.images];
 }
 
 function getSizes(type: 'glove' | 'bat' | 'other'): string[] {
