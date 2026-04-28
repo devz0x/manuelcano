@@ -16,6 +16,9 @@ const translations: Record<Locale, Translations> = {
     'utility.sizeGuide': 'Guía de Tallas',
     'utility.warranty': 'Garantía Pro',
     'utility.trackOrder': 'Rastrear Pedido',
+    'utility.announcement1': 'ENVÍO GRATIS EN PEDIDOS DE $100+',
+    'utility.announcement2': 'GARANTÍA PRO EN TODO EL EQUIPAMIENTO',
+    'utility.announcement3': 'FABRICADO A MANO EN REPÚBLICA DOMINICANA',
 
     // Navigation categories
     'nav.gloves': 'Guantes',
@@ -176,6 +179,9 @@ const translations: Record<Locale, Translations> = {
     'mobile.account': 'Mi Cuenta',
     'mobile.search': 'Buscar',
     'mobile.cart': 'Carrito',
+    'mobile.home': 'Inicio',
+    'mobile.shop': 'Tienda',
+    'mobile.custom': 'Custom',
 
     // Footer
     'footer.newsletterTitle': 'Entra al Roster.',
@@ -782,6 +788,9 @@ const translations: Record<Locale, Translations> = {
     'utility.sizeGuide': 'Size Guide',
     'utility.warranty': 'Pro Warranty',
     'utility.trackOrder': 'Track Order',
+    'utility.announcement1': 'FREE SHIPPING ON ORDERS $100+',
+    'utility.announcement2': 'PRO WARRANTY ON ALL EQUIPMENT',
+    'utility.announcement3': 'HANDCRAFTED IN DOMINICAN REPUBLIC',
 
     // Navigation categories
     'nav.gloves': 'Gloves',
@@ -942,6 +951,9 @@ const translations: Record<Locale, Translations> = {
     'mobile.account': 'My Account',
     'mobile.search': 'Search',
     'mobile.cart': 'Cart',
+    'mobile.home': 'Home',
+    'mobile.shop': 'Shop',
+    'mobile.custom': 'Custom',
 
     // Footer
     'footer.newsletterTitle': 'Join the Roster.',

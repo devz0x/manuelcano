@@ -305,3 +305,43 @@ Stage Summary:
 - Homepage CTAs (Hero + Custom Promo) navigate to configurator
 - ESLint: 0 errors, 0 warnings
 - Dev server: compiled clean
+
+---
+Task ID: R2+R5+R6
+Agent: Frontend Developer
+Task: Mobile Bottom Nav, Animated Announcement Bar, Transparent Navbar
+
+Work Log:
+- Created Mobile Bottom Navigation Bar (src/components/manny-cano/mobile-bottom-nav.tsx):
+  - Nike-style fixed bottom nav with 5 tabs: Home, Shop, Custom, Search, Profile
+  - Icons only with tiny labels, active tab highlighted in stadium-crimson
+  - Uses useNavigationStore for active state and navigation
+  - Only visible on mobile (md:hidden), safe area padding for iOS
+  - Clean, minimal design with smooth transitions
+- Updated Utility Bar (src/components/manny-cano/utility-bar.tsx):
+  - Replaced static promo text with 3 rotating announcements (4-second interval)
+  - Announcements: Free shipping, Pro warranty, Handcrafted in DR (with Truck, ShieldCheck, Globe icons)
+  - Smooth slide-up/fade CSS animation between messages (no Framer Motion)
+  - Kept ES/EN language toggle on the right side
+  - Simplified layout: removed desktop-only links (size guide, warranty, track order) for cleaner look
+  - Responsive: same bar on all screen sizes
+- Improved Navbar (src/components/manny-cano/navbar.tsx):
+  - Transparent background when on home view at top of page (text-white)
+  - Transitions to white/95 with backdrop-blur after scrolling 100px (text-dugout-charcoal)
+  - Smooth transition-all duration-300 for background change
+  - Reduced nav height from h-16 to h-[60px] for sleeker look
+  - Changed max-w-7xl to max-w-[1400px] for wider layout
+  - Removed shadow-sm from default state, only shows shadow when scrolled
+  - Uses scroll event listener + requestAnimationFrame for view-change sync
+- Added i18n translation keys:
+  - utility.announcement1, utility.announcement2, utility.announcement3 (ES + EN)
+  - mobile.home, mobile.shop, mobile.custom (ES + EN)
+- Updated page.tsx: imported MobileBottomNav, added it after Footer in the Home component return
+
+Stage Summary:
+- Mobile bottom nav provides Nike-style navigation on mobile screens
+- Announcement bar cycles 3 promotional messages with smooth CSS animations
+- Navbar transitions from transparent to solid on scroll when on home page
+- All text bilingual (ES/EN) with 9 new translation keys per locale
+- ESLint: 0 errors, 0 warnings
+- Dev server: compiled clean, all routes 200 OK

@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { Star, ShoppingBag } from 'lucide-react';
+import { Star, ShoppingBag, Heart } from 'lucide-react';
 import { useCartStore } from '@/lib/store';
 import { useI18n } from '@/lib/i18n';
 import { useNavigationStore } from '@/lib/navigation-store';
@@ -23,23 +23,6 @@ function formatPrice(price: number): string {
   return `$${price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 }
 
-function StarRating({ rating }: { rating: number }) {
-  return (
-    <div className="flex items-center gap-0.5">
-      {Array.from({ length: 5 }).map((_, i) => (
-        <Star
-          key={i}
-          className={`h-3.5 w-3.5 ${
-            i < Math.round(rating)
-              ? 'fill-gold-glove text-gold-glove'
-              : 'fill-none text-muted-foreground/30'
-          }`}
-        />
-      ))}
-    </div>
-  );
-}
-
 export function ProductCard({
   id,
   name,
@@ -59,7 +42,7 @@ export function ProductCard({
   const badgeConfig: Record<string, { labelKey: string; className: string }> = {
     bestseller: {
       labelKey: 'products.moreSold',
-      className: 'bg-stadium-crimson',
+      className: 'bg-diamond-navy',
     },
     nuevo: {
       labelKey: 'products.new',
@@ -67,7 +50,7 @@ export function ProductCard({
     },
     premium: {
       labelKey: 'products.premium',
-      className: 'bg-gold-glove',
+      className: 'bg-gold-glove text-diamond-navy',
     },
   };
 
@@ -86,66 +69,100 @@ export function ProductCard({
     toast.success(`${name} ${t('cart.added')}`);
   };
 
+  const hasDiscount = compareAtPrice && compareAtPrice > price;
+  const discountPct = hasDiscount
+    ? Math.round(((compareAtPrice! - price) / compareAtPrice!) * 100)
+    : 0;
+
   return (
     <div
-      className="group cursor-pointer overflow-hidden rounded-lg bg-white shadow-sm transition-shadow duration-300 hover:shadow-lg"
+      className="group cursor-pointer"
       onClick={() => navigate('product', { slug })}
     >
       {/* Image Container */}
-      <div className="relative aspect-square overflow-hidden bg-bone-cream">
+      <div className="relative aspect-[4/5] overflow-hidden rounded-md bg-bone-cream">
         <Image
           src={image}
           alt={name}
           fill
-          className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+          className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
           sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
         />
 
-        {/* Badge */}
+        {/* Badge - top left */}
         {firstBadge && (
           <span
-            className={`absolute left-3 top-3 ${firstBadge.className} px-2.5 py-1 text-xs font-semibold uppercase tracking-wider text-white`}
+            className={`absolute left-3 top-3 ${firstBadge.className} px-2.5 py-1 text-[10px] font-semibold uppercase tracking-widest text-white`}
           >
             {t(firstBadge.labelKey)}
           </span>
         )}
+
+        {/* Discount badge - top right */}
+        {hasDiscount && (
+          <span className="absolute right-3 top-3 bg-stadium-crimson px-2 py-1 text-[10px] font-bold text-white">
+            -{discountPct}%
+          </span>
+        )}
+
+        {/* Wishlist button - always visible */}
+        <button
+          onClick={(e) => { e.stopPropagation(); }}
+          className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full bg-white/80 text-dugout-charcoal opacity-0 backdrop-blur-sm transition-all duration-300 hover:bg-white hover:text-stadium-crimson group-hover:opacity-100"
+          aria-label="Add to wishlist"
+        >
+          <Heart className="h-3.5 w-3.5" />
+        </button>
+
+        {/* Quick Add Overlay - bottom, slides up on hover */}
+        <div className="absolute inset-x-0 bottom-0 translate-y-full transition-transform duration-300 ease-out group-hover:translate-y-0">
+          <button
+            onClick={handleAddToCart}
+            className="flex w-full items-center justify-center gap-2 bg-diamond-navy/95 py-3 text-xs font-semibold uppercase tracking-widest text-white backdrop-blur-sm transition-colors hover:bg-diamond-navy"
+          >
+            <ShoppingBag className="h-3.5 w-3.5" />
+            {t('products.addToCart')}
+          </button>
+        </div>
       </div>
 
-      {/* Content */}
-      <div className="p-4">
+      {/* Content - minimal, clean */}
+      <div className="mt-3 space-y-1.5">
         {/* Product Name */}
-        <h3 className="line-clamp-2 font-headline text-sm uppercase tracking-wide text-diamond-navy">
+        <h3 className="truncate text-sm font-medium text-dugout-charcoal">
           {name}
         </h3>
 
-        {/* Rating */}
-        <div className="mt-2 flex items-center gap-2">
-          <StarRating rating={rating} />
-          <span className="text-xs text-muted-foreground">
-            ({reviewCount} {t('products.reviews')})
+        {/* Rating - subtle */}
+        <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-0.5">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <Star
+                key={i}
+                className={`h-3 w-3 ${
+                  i < Math.round(rating)
+                    ? 'fill-gold-glove text-gold-glove'
+                    : 'fill-none text-neutral-200'
+                }`}
+              />
+            ))}
+          </div>
+          <span className="text-[11px] text-neutral-400">
+            {reviewCount}
           </span>
         </div>
 
         {/* Price */}
-        <div className="mt-2 flex items-center gap-2">
-          <span className="font-headline text-xl text-diamond-navy">
+        <div className="flex items-center gap-2">
+          <span className="text-sm font-semibold text-dugout-charcoal">
             {formatPrice(price)}
           </span>
-          {compareAtPrice && compareAtPrice > price && (
-            <span className="text-sm text-muted-foreground line-through">
-              {formatPrice(compareAtPrice)}
+          {hasDiscount && (
+            <span className="text-xs text-neutral-400 line-through">
+              {formatPrice(compareAtPrice!)}
             </span>
           )}
         </div>
-
-        {/* Add to Cart Button */}
-        <button
-          onClick={handleAddToCart}
-          className="mt-3 flex w-full items-center justify-center gap-2 bg-diamond-navy py-2 font-headline text-xs uppercase tracking-wider text-white transition-colors hover:bg-diamond-navy/90"
-        >
-          <ShoppingBag className="h-3.5 w-3.5" />
-          {t('products.addToCart')}
-        </button>
       </div>
     </div>
   );

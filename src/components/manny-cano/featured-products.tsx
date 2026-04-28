@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
+import { ArrowRight } from 'lucide-react';
 import { ProductCard } from './product-card';
 import { useI18n } from '@/lib/i18n';
 import { useNavigationStore } from '@/lib/navigation-store';
@@ -18,30 +19,13 @@ interface Product {
   slug: string;
 }
 
-const containerVariants = {
-  hidden: {},
-  visible: {
-    transition: {
-      staggerChildren: 0.08,
-    },
-  },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.5, ease: 'easeOut' as const },
-  },
-};
-
 export function FeaturedProducts() {
   const { t } = useI18n();
   const navigate = useNavigationStore((s) => s.navigate);
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const ref = useRef<HTMLDivElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: '-80px' });
 
   useEffect(() => {
@@ -49,7 +33,6 @@ export function FeaturedProducts() {
       try {
         const res = await fetch('/api/products');
         const data = await res.json();
-        // Show up to 8 featured products on homepage (prioritize bestsellers)
         const all = data.products || [];
         const featured = all
           .sort((a: Product, b: Product) => {
@@ -69,29 +52,52 @@ export function FeaturedProducts() {
     fetchProducts();
   }, []);
 
+  const scroll = (direction: 'left' | 'right') => {
+    if (!scrollRef.current) return;
+    const scrollAmount = scrollRef.current.offsetWidth * 0.7;
+    scrollRef.current.scrollBy({
+      left: direction === 'left' ? -scrollAmount : scrollAmount,
+      behavior: 'smooth',
+    });
+  };
+
   return (
-    <section id="productos" className="bg-bone-cream py-16 md:py-24">
-      <div className="mx-auto max-w-7xl px-6">
+    <section id="productos" className="bg-white py-20 md:py-28">
+      <div className="mx-auto max-w-7xl px-5 lg:px-8">
         {/* Section Heading */}
-        <div className="mb-12 text-center">
-          <h2 className="font-display text-4xl font-bold text-diamond-navy">
-            {t('products.title')}
-          </h2>
-          <p className="mx-auto mt-4 max-w-xl text-tobacco-leather">
-            {t('products.subtitle')}
-          </p>
+        <div className="mb-10 flex items-end justify-between md:mb-14">
+          <div>
+            <p className="mb-2 font-headline text-xs uppercase tracking-[0.25em] text-gold-glove">
+              {t('hero.tagline')}
+            </p>
+            <h2 className="font-display text-3xl font-bold text-diamond-navy md:text-4xl">
+              {t('products.title')}
+            </h2>
+            <p className="mt-3 max-w-md text-sm leading-relaxed text-neutral-500">
+              {t('products.subtitle')}
+            </p>
+          </div>
+
+          {/* View All Button - desktop */}
+          <button
+            onClick={() => navigate('shop')}
+            className="hidden items-center gap-2 border-b-2 border-diamond-navy pb-1 font-headline text-xs uppercase tracking-widest text-diamond-navy transition-colors hover:border-stadium-crimson hover:text-stadium-crimson md:flex"
+          >
+            {t('products.viewAll')}
+            <ArrowRight className="h-3.5 w-3.5" />
+          </button>
         </div>
 
         {/* Loading Skeletons */}
         {loading && (
-          <div className="grid grid-cols-2 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-            {Array.from({ length: 6 }).map((_, i) => (
+          <div className="grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-3 lg:grid-cols-4 md:gap-x-5">
+            {Array.from({ length: 8 }).map((_, i) => (
               <div key={i} className="animate-pulse">
-                <div className="aspect-square rounded-lg bg-muted" />
-                <div className="mt-3 space-y-2 p-1">
-                  <div className="h-4 w-3/4 rounded bg-muted" />
-                  <div className="h-3 w-1/2 rounded bg-muted" />
-                  <div className="h-6 w-1/3 rounded bg-muted" />
+                <div className="aspect-[4/5] rounded-md bg-neutral-100" />
+                <div className="mt-3 space-y-2">
+                  <div className="h-4 w-3/4 rounded bg-neutral-100" />
+                  <div className="h-3 w-1/2 rounded bg-neutral-100" />
+                  <div className="h-5 w-1/3 rounded bg-neutral-100" />
                 </div>
               </div>
             ))}
@@ -99,16 +105,25 @@ export function FeaturedProducts() {
         )}
 
         {/* Products Grid */}
-        {!loading && (
+        {!loading && products.length > 0 && (
           <motion.div
             ref={ref}
-            variants={containerVariants}
             initial="hidden"
             animate={isInView ? 'visible' : 'hidden'}
-            className="grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 md:gap-6"
+            variants={{
+              hidden: {},
+              visible: { transition: { staggerChildren: 0.06 } },
+            }}
+            className="grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-3 lg:grid-cols-4 md:gap-x-5"
           >
             {products.map((product) => (
-              <motion.div key={product.id} variants={itemVariants}>
+              <motion.div
+                key={product.id}
+                variants={{
+                  hidden: { opacity: 0, y: 20 },
+                  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' as const } },
+                }}
+              >
                 <ProductCard
                   id={product.id}
                   name={product.name}
@@ -125,21 +140,17 @@ export function FeaturedProducts() {
           </motion.div>
         )}
 
-        {/* View All Link */}
+        {/* View All - mobile only */}
         {!loading && products.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-            transition={{ duration: 0.5, delay: 0.6 }}
-            className="mt-12 text-center"
-          >
+          <div className="mt-8 text-center md:hidden">
             <button
               onClick={() => navigate('shop')}
-              className="font-headline uppercase tracking-wider text-stadium-crimson underline-offset-4 transition-colors hover:text-stadium-crimson/80 hover:underline"
+              className="inline-flex items-center gap-2 border border-diamond-navy px-6 py-3 font-headline text-xs uppercase tracking-widest text-diamond-navy transition-colors hover:bg-diamond-navy hover:text-white"
             >
               {t('products.viewAll')}
+              <ArrowRight className="h-3.5 w-3.5" />
             </button>
-          </motion.div>
+          </div>
         )}
       </div>
     </section>

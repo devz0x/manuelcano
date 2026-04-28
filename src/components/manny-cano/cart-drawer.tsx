@@ -1,6 +1,6 @@
 'use client';
 
-import { Minus, Plus, Trash2 } from 'lucide-react';
+import { Minus, Plus, Trash2, Truck, Gift } from 'lucide-react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
@@ -13,22 +13,52 @@ import {
 } from '@/components/ui/sheet';
 import { useCartStore } from '@/lib/store';
 import { useI18n } from '@/lib/i18n';
+import { useNavigationStore } from '@/lib/navigation-store';
 import { MCLogo } from './mc-logo';
 
-/* ------------------------------------------------------------------ */
-/*  Price formatter (USD)                                               */
-/* ------------------------------------------------------------------ */
+const FREE_SHIPPING_THRESHOLD = 100;
 
 function formatPrice(amount: number): string {
   return `$${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 }
 
-/* ------------------------------------------------------------------ */
-/*  Cart Drawer                                                         */
-/* ------------------------------------------------------------------ */
+function FreeShippingBar({ total }: { total: number }) {
+  const progress = Math.min((total / FREE_SHIPPING_THRESHOLD) * 100, 100);
+  const remaining = Math.max(FREE_SHIPPING_THRESHOLD - total, 0);
+  const qualified = total >= FREE_SHIPPING_THRESHOLD;
+
+  return (
+    <div className="space-y-2 px-6 pb-4 pt-1">
+      <div className="flex items-center justify-between text-xs">
+        <div className="flex items-center gap-1.5 font-medium text-dugout-charcoal">
+          <Truck className="h-3.5 w-3.5 text-field-green" />
+          {qualified ? (
+            <span className="text-field-green">Free shipping unlocked!</span>
+          ) : (
+            <span>
+              Add <span className="font-bold text-stadium-crimson">{formatPrice(remaining)}</span> for free shipping
+            </span>
+          )}
+        </div>
+        {!qualified && (
+          <span className="text-neutral-400">{formatPrice(total)} / {formatPrice(FREE_SHIPPING_THRESHOLD)}</span>
+        )}
+      </div>
+      <div className="h-1.5 w-full overflow-hidden rounded-full bg-neutral-100">
+        <div
+          className={`h-full rounded-full transition-all duration-500 ease-out ${
+            qualified ? 'bg-field-green' : 'bg-stadium-crimson'
+          }`}
+          style={{ width: `${progress}%` }}
+        />
+      </div>
+    </div>
+  );
+}
 
 export function CartDrawer() {
   const { t } = useI18n();
+  const navigate = useNavigationStore((s) => s.navigate);
   const items = useCartStore((s) => s.items);
   const isOpen = useCartStore((s) => s.isOpen);
   const closeCart = useCartStore((s) => s.closeCart);
@@ -42,15 +72,15 @@ export function CartDrawer() {
     <Sheet open={isOpen} onOpenChange={(open) => !open && closeCart()}>
       <SheetContent
         side="right"
-        className="flex w-full flex-col p-0 sm:max-w-md"
+        className="flex w-full flex-col p-0 sm:max-w-[420px]"
       >
         {/* Header */}
-        <SheetHeader className="border-b border-bone-cream px-6 py-4">
-          <SheetTitle className="font-headline text-lg uppercase tracking-wider text-diamond-navy">
+        <SheetHeader className="border-b border-neutral-100 px-6 py-4">
+          <SheetTitle className="font-headline text-base uppercase tracking-widest text-diamond-navy">
             {t('cart.title')}
             {items.length > 0 && (
-              <span className="ml-2 text-sm font-body normal-case tracking-normal text-tobacco-leather">
-                ({items.length} {items.length === 1 ? t('cart.item') : t('cart.items')})
+              <span className="ml-2 text-sm font-body normal-case tracking-normal text-neutral-400">
+                ({items.length})
               </span>
             )}
           </SheetTitle>
@@ -58,21 +88,21 @@ export function CartDrawer() {
 
         {isEmpty ? (
           /* Empty State */
-          <div className="flex flex-1 flex-col items-center justify-center gap-4 px-6 text-center">
+          <div className="flex flex-1 flex-col items-center justify-center gap-5 px-6 text-center">
             <div className="flex size-20 items-center justify-center rounded-full bg-bone-cream">
-              <MCLogo height={48} iconOnly />
+              <MCLogo height={40} iconOnly />
             </div>
             <div>
-              <p className="font-headline text-lg uppercase tracking-wide text-dugout-charcoal">
+              <p className="font-headline text-base uppercase tracking-wide text-dugout-charcoal">
                 {t('cart.empty')}
               </p>
-              <p className="mt-1 text-sm text-tobacco-leather">
+              <p className="mt-1.5 text-sm text-neutral-400">
                 {t('cart.emptyDesc')}
               </p>
             </div>
             <Button
               variant="outline"
-              className="mt-2 border-diamond-navy font-headline uppercase tracking-wide text-diamond-navy hover:bg-diamond-navy hover:text-white"
+              className="mt-1 h-11 w-full max-w-[240px] border-diamond-navy font-headline text-xs uppercase tracking-widest text-diamond-navy hover:bg-diamond-navy hover:text-white"
               onClick={closeCart}
             >
               {t('cart.continueShopping')}
@@ -80,90 +110,100 @@ export function CartDrawer() {
           </div>
         ) : (
           <>
+            {/* Free Shipping Progress */}
+            <FreeShippingBar total={total()} />
+
             {/* Items List */}
             <ScrollArea className="flex-1">
-              <div className="flex flex-col gap-0">
+              <div className="flex flex-col">
                 {items.map((item, index) => (
                   <div key={item.id}>
                     <div className="flex gap-4 px-6 py-4">
                       {/* Thumbnail */}
-                      <div className="relative size-20 flex-shrink-0 overflow-hidden rounded-md bg-bone-cream">
+                      <button
+                        onClick={() => {
+                          closeCart();
+                          navigate('product', { slug: item.name.toLowerCase().replace(/\s+/g, '-') });
+                        }}
+                        className="relative size-[72px] shrink-0 overflow-hidden rounded-md bg-bone-cream transition-opacity hover:opacity-80"
+                      >
                         {item.image ? (
                           <Image
                             src={item.image}
                             alt={item.name}
                             fill
                             className="object-cover"
-                            sizes="80px"
+                            sizes="72px"
                           />
                         ) : (
                           <div className="flex size-full items-center justify-center">
-                            <MCLogo height={32} iconOnly />
+                            <MCLogo height={28} iconOnly />
                           </div>
                         )}
-                      </div>
+                      </button>
 
                       {/* Info */}
                       <div className="flex min-w-0 flex-1 flex-col justify-between">
-                        <div>
-                          <h4 className="truncate text-sm font-semibold text-dugout-charcoal">
-                            {item.name}
-                          </h4>
-                          {item.size && (
-                            <p className="text-xs text-tobacco-leather">
-                              {t('cart.size')}: {item.size}
-                            </p>
-                          )}
-                          {item.color && (
-                            <p className="text-xs text-tobacco-leather">
-                              {t('cart.color')}: {item.color}
-                            </p>
-                          )}
-                        </div>
-                        <div className="mt-2 flex items-center justify-between">
-                          <span className="text-sm font-semibold text-diamond-navy">
-                            {formatPrice(item.price)}
-                          </span>
+                        <div className="flex items-start justify-between gap-2">
+                          <div className="min-w-0">
+                            <h4 className="truncate text-sm font-medium text-dugout-charcoal">
+                              {item.name}
+                            </h4>
+                            {item.size && (
+                              <p className="text-xs text-neutral-400">
+                                {t('cart.size')}: {item.size}
+                              </p>
+                            )}
+                            {item.color && (
+                              <p className="text-xs text-neutral-400">
+                                {t('cart.color')}: {item.color}
+                              </p>
+                            )}
+                          </div>
 
-                          {/* Quantity Controls */}
-                          <div className="flex items-center gap-2">
+                          {/* Remove */}
+                          <button
+                            onClick={() => removeItem(item.id)}
+                            className="shrink-0 p-1 text-neutral-300 transition-colors hover:text-stadium-crimson"
+                            aria-label="Remove item"
+                          >
+                            <Trash2 className="size-3.5" />
+                          </button>
+                        </div>
+
+                        <div className="mt-2 flex items-center justify-between">
+                          <div className="flex items-center gap-1 rounded-full border border-neutral-200">
                             <button
                               onClick={() =>
                                 updateQuantity(item.id, item.quantity - 1)
                               }
-                              className="flex size-7 items-center justify-center rounded-md border border-bone-cream text-dugout-charcoal transition-colors hover:border-stadium-crimson hover:text-stadium-crimson"
+                              className="flex h-7 w-7 items-center justify-center text-neutral-400 transition-colors hover:text-dugout-charcoal"
                               aria-label="Decrease quantity"
                             >
                               <Minus className="size-3" />
                             </button>
-                            <span className="w-6 text-center text-sm font-medium text-dugout-charcoal">
+                            <span className="w-5 text-center text-xs font-medium text-dugout-charcoal">
                               {item.quantity}
                             </span>
                             <button
                               onClick={() =>
                                 updateQuantity(item.id, item.quantity + 1)
                               }
-                              className="flex size-7 items-center justify-center rounded-md border border-bone-cream text-dugout-charcoal transition-colors hover:border-stadium-crimson hover:text-stadium-crimson"
+                              className="flex h-7 w-7 items-center justify-center text-neutral-400 transition-colors hover:text-dugout-charcoal"
                               aria-label="Increase quantity"
                             >
                               <Plus className="size-3" />
                             </button>
                           </div>
+                          <span className="text-sm font-semibold text-dugout-charcoal">
+                            {formatPrice(item.price * item.quantity)}
+                          </span>
                         </div>
                       </div>
-
-                      {/* Remove */}
-                      <button
-                        onClick={() => removeItem(item.id)}
-                        className="self-start p-1 text-tobacco-leather/50 transition-colors hover:text-stadium-crimson"
-                        aria-label="Remove item"
-                      >
-                        <Trash2 className="size-4" />
-                      </button>
                     </div>
 
                     {index < items.length - 1 && (
-                      <Separator className="mx-6 bg-bone-cream" />
+                      <Separator className="mx-6 bg-neutral-100" />
                     )}
                   </div>
                 ))}
@@ -171,31 +211,46 @@ export function CartDrawer() {
             </ScrollArea>
 
             {/* Footer */}
-            <div className="border-t border-bone-cream px-6 py-5">
+            <div className="border-t border-neutral-100 px-6 py-5">
+              {/* Gift promo */}
+              {total() < FREE_SHIPPING_THRESHOLD && (
+                <div className="mb-4 flex items-center gap-2 rounded-lg bg-bone-cream px-3 py-2.5">
+                  <Gift className="h-4 w-4 shrink-0 text-stadium-crimson" />
+                  <p className="text-xs text-tobacco-leather">
+                    Add <span className="font-bold">{formatPrice(FREE_SHIPPING_THRESHOLD - total())}</span> more for free shipping!
+                  </p>
+                </div>
+              )}
+
               <div className="mb-4 flex items-center justify-between">
-                <span className="font-headline text-sm uppercase tracking-wide text-tobacco-leather">
+                <span className="text-sm text-neutral-500">
                   {t('cart.total')}
                 </span>
-                <span className="font-headline text-xl tracking-wide text-diamond-navy">
+                <span className="font-headline text-lg tracking-wide text-diamond-navy">
                   {formatPrice(total())}
                 </span>
               </div>
 
-              <div className="flex flex-col gap-2">
-                <Button
-                  variant="outline"
-                  className="w-full border-diamond-navy font-headline uppercase tracking-wide text-diamond-navy hover:bg-diamond-navy hover:text-white"
-                >
-                  {t('cart.viewCart')}
-                </Button>
-                <Button className="w-full bg-stadium-crimson font-headline uppercase tracking-wide text-white hover:bg-stadium-crimson/90">
-                  {t('cart.checkout')}
-                </Button>
-              </div>
+              <Button
+                onClick={() => {
+                  closeCart();
+                  navigate('checkout');
+                }}
+                className="mb-2 h-12 w-full bg-diamond-navy font-headline text-sm uppercase tracking-widest text-bone-cream hover:bg-diamond-navy/90"
+              >
+                {t('cart.checkout')}
+              </Button>
 
-              <p className="mt-3 text-center text-xs text-tobacco-leather/70">
-                {t('cart.shippingNote')}
-              </p>
+              <Button
+                variant="ghost"
+                onClick={() => {
+                  closeCart();
+                  navigate('cart');
+                }}
+                className="w-full text-xs uppercase tracking-widest text-neutral-400 hover:text-dugout-charcoal"
+              >
+                {t('cart.viewCart')}
+              </Button>
             </div>
           </>
         )}

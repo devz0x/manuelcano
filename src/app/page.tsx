@@ -9,12 +9,10 @@ import { Footer } from '@/components/manny-cano/footer';
 
 /* Homepage sections */
 import { HeroSection } from '@/components/manny-cano/hero-section';
-import { EquipmentShowcase } from '@/components/manny-cano/equipment-showcase';
 import { CategoryGrid } from '@/components/manny-cano/category-grid';
 import { FeaturedProducts } from '@/components/manny-cano/featured-products';
 import { BrandStory } from '@/components/manny-cano/brand-story';
 import { CustomPromo } from '@/components/manny-cano/custom-promo';
-import { TechStrip } from '@/components/manny-cano/tech-strip';
 import { Testimonials } from '@/components/manny-cano/testimonials';
 import { PressBar } from '@/components/manny-cano/press-bar';
 
@@ -32,17 +30,16 @@ import { CheckoutPage } from '@/components/manny-cano/checkout-page';
 import { CustomGlovePage } from '@/components/manny-cano/custom-glove-page';
 
 import { useState, useEffect } from 'react';
+import { MobileBottomNav } from '@/components/manny-cano/mobile-bottom-nav';
 
 function HomePage() {
   return (
     <>
       <HeroSection />
-      <EquipmentShowcase />
-      <CategoryGrid />
       <FeaturedProducts />
-      <BrandStory />
+      <CategoryGrid />
       <CustomPromo />
-      <TechStrip />
+      <BrandStory />
       <Testimonials />
       <PressBar />
     </>
@@ -150,6 +147,9 @@ export default function Home() {
 
       {/* Footer with newsletter */}
       <Footer />
+
+      {/* Mobile Bottom Navigation */}
+      <MobileBottomNav onSearchOpen={() => setSearchOpen(true)} />
     </>
   );
 }

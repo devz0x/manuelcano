@@ -130,11 +130,35 @@ interface NavbarProps {
 export function Navbar({ onSearchOpen }: NavbarProps) {
   const { t } = useI18n();
   const navigate = useNavigationStore((s) => s.navigate);
+  const view = useNavigationStore((s) => s.view);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
+  const [scrolled, setScrolled] = useState(false);
   const menuTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const itemCount = useCartStore((s) => s.itemCount);
   const openCart = useCartStore((s) => s.openCart);
+
+  const isHome = view === 'home';
+  const isTransparent = isHome && !scrolled;
+
+  /* Scroll listener for transparent-to-solid transition */
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 100);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  /* Sync scrolled state with navigation view changes */
+  useEffect(() => {
+    // Scroll listener handles scrolled state; this ensures
+    // we check scroll position after view transitions
+    const check = () => setScrolled(window.scrollY > 100);
+    // Run immediately after the navigation store scrolls to top
+    requestAnimationFrame(check);
+  }, [view]);
 
   /* Hover handlers for mega menu */
   const handleMouseEnter = useCallback((labelKey: string) => {
@@ -169,12 +193,20 @@ export function Navbar({ onSearchOpen }: NavbarProps) {
 
   return (
     <>
-      <nav className="sticky top-0 z-40 bg-white shadow-sm">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 lg:px-8">
+      <nav
+        className={`sticky top-0 z-40 transition-all duration-300 ${
+          isTransparent
+            ? 'bg-transparent'
+            : scrolled
+              ? 'bg-white/95 shadow-sm backdrop-blur-md'
+              : 'bg-white'
+        }`}
+      >
+        <div className="mx-auto flex h-[60px] max-w-[1400px] items-center justify-between px-4 lg:px-8">
           {/* Left: Logo */}
           <button onClick={handleLogoClick} className="flex items-center group">
             <MCLogo
-              height={38}
+              height={36}
               className="transition-transform group-hover:scale-105"
             />
           </button>
@@ -189,7 +221,11 @@ export function Navbar({ onSearchOpen }: NavbarProps) {
                   onMouseEnter={() => handleMouseEnter(item.labelKey)}
                 >
                   <button
-                    className="flex items-center gap-1 px-3 py-2 font-headline text-sm uppercase tracking-wide text-dugout-charcoal transition-colors hover:text-stadium-crimson"
+                    className={`flex items-center gap-1 px-3 py-2 font-headline text-sm uppercase tracking-wide transition-colors hover:text-stadium-crimson ${
+                      isTransparent
+                        ? 'text-white'
+                        : 'text-dugout-charcoal'
+                    }`}
                     onClick={() =>
                       setActiveMenu(activeMenu === item.labelKey ? null : item.labelKey)
                     }
@@ -251,7 +287,9 @@ export function Navbar({ onSearchOpen }: NavbarProps) {
             <Button
               variant="ghost"
               size="icon"
-              className="text-dugout-charcoal hover:text-stadium-crimson"
+              className={`transition-colors hover:text-stadium-crimson ${
+                isTransparent ? 'text-white' : 'text-dugout-charcoal'
+              }`}
               aria-label={t('mobile.search')}
               onClick={() => onSearchOpen?.()}
             >
@@ -261,7 +299,9 @@ export function Navbar({ onSearchOpen }: NavbarProps) {
             <Button
               variant="ghost"
               size="icon"
-              className="hidden sm:inline-flex text-dugout-charcoal hover:text-stadium-crimson"
+              className={`hidden transition-colors hover:text-stadium-crimson sm:inline-flex ${
+                isTransparent ? 'text-white' : 'text-dugout-charcoal'
+              }`}
               aria-label={t('mobile.account')}
             >
               <User className="size-5" />
@@ -270,7 +310,9 @@ export function Navbar({ onSearchOpen }: NavbarProps) {
             <Button
               variant="ghost"
               size="icon"
-              className="relative text-dugout-charcoal hover:text-stadium-crimson"
+              className={`relative transition-colors hover:text-stadium-crimson ${
+                isTransparent ? 'text-white' : 'text-dugout-charcoal'
+              }`}
               aria-label={t('mobile.cart')}
               onClick={openCart}
             >
@@ -286,7 +328,9 @@ export function Navbar({ onSearchOpen }: NavbarProps) {
             <Button
               variant="ghost"
               size="icon"
-              className="lg:hidden text-dugout-charcoal hover:text-stadium-crimson"
+              className={`lg:hidden transition-colors hover:text-stadium-crimson ${
+                isTransparent ? 'text-white' : 'text-dugout-charcoal'
+              }`}
               aria-label={t('mobile.menu')}
               onClick={() => setMobileMenuOpen(true)}
             >
