@@ -1,0 +1,234 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  /* shadcn/ui color mappings */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-body);
+  --font-mono: var(--font-geist-mono);
+
+  /* sidebar tokens */
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+
+  /* chart tokens */
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+
+  /* core shadcn tokens */
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+
+  /* Manny Cano brand colors */
+  --color-diamond-navy: #0A1A2F;
+  --color-stadium-crimson: #9B1B30;
+  --color-tobacco-leather: #6B4226;
+  --color-gold-glove: #C9A24B;
+  --color-bone-cream: #F4EFE6;
+  --color-dugout-charcoal: #1C1C1C;
+  --color-field-green: #2E5D3A;
+  --color-infield-tan: #B98A5E;
+
+  /* Manny Cano font families */
+  --font-display: var(--font-playfair-display);
+  --font-headline: var(--font-oswald);
+  --font-body: var(--font-inter);
+  --font-script: var(--font-caveat);
+
+  /* radius tokens */
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+:root {
+  --radius: 0.625rem;
+
+  /* shadcn token mappings - Manny Cano brand */
+  --background: #FFFFFF;
+  --foreground: #1C1C1C;
+  --card: #FFFFFF;
+  --card-foreground: #1C1C1C;
+  --popover: #FFFFFF;
+  --popover-foreground: #1C1C1C;
+  --primary: #0A1A2F;
+  --primary-foreground: #F4EFE6;
+  --secondary: #9B1B30;
+  --secondary-foreground: #FFFFFF;
+  --muted: #F4EFE6;
+  --muted-foreground: #6B4226;
+  --accent: #6B4226;
+  --accent-foreground: #F4EFE6;
+  --destructive: #DC2626;
+  --border: #E5DFD3;
+  --input: #E5DFD3;
+  --ring: #9B1B30;
+
+  /* Manny Cano brand tokens */
+  --diamond-navy: #0A1A2F;
+  --stadium-crimson: #9B1B30;
+  --tobacco-leather: #6B4226;
+  --gold-glove: #C9A24B;
+  --bone-cream: #F4EFE6;
+  --dugout-charcoal: #1C1C1C;
+  --field-green: #2E5D3A;
+  --infield-tan: #B98A5E;
+
+  /* chart tokens - Manny Cano palette */
+  --chart-1: #0A1A2F;
+  --chart-2: #9B1B30;
+  --chart-3: #C9A24B;
+  --chart-4: #6B4226;
+  --chart-5: #2E5D3A;
+
+  /* sidebar tokens */
+  --sidebar: #0A1A2F;
+  --sidebar-foreground: #F4EFE6;
+  --sidebar-primary: #9B1B30;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #0A1A2F;
+  --sidebar-accent-foreground: #C9A24B;
+  --sidebar-border: #1C1C1C;
+  --sidebar-ring: #9B1B30;
+}
+
+.dark {
+  --background: #0A1A2F;
+  --foreground: #F4EFE6;
+  --card: #0F2440;
+  --card-foreground: #F4EFE6;
+  --popover: #0F2440;
+  --popover-foreground: #F4EFE6;
+  --primary: #F4EFE6;
+  --primary-foreground: #0A1A2F;
+  --secondary: #9B1B30;
+  --secondary-foreground: #FFFFFF;
+  --muted: #1C2E4A;
+  --muted-foreground: #B98A5E;
+  --accent: #C9A24B;
+  --accent-foreground: #0A1A2F;
+  --destructive: #DC2626;
+  --border: #1C2E4A;
+  --input: #1C2E4A;
+  --ring: #C9A24B;
+
+  /* chart tokens - dark mode */
+  --chart-1: #C9A24B;
+  --chart-2: #9B1B30;
+  --chart-3: #B98A5E;
+  --chart-4: #2E5D3A;
+  --chart-5: #F4EFE6;
+
+  /* sidebar tokens - dark */
+  --sidebar: #071220;
+  --sidebar-foreground: #F4EFE6;
+  --sidebar-primary: #C9A24B;
+  --sidebar-primary-foreground: #0A1A2F;
+  --sidebar-accent: #0F2440;
+  --sidebar-accent-foreground: #C9A24B;
+  --sidebar-border: #1C2E4A;
+  --sidebar-ring: #C9A24B;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Manny Cano font utility classes */
+.font-display {
+  font-family: var(--font-playfair-display), "Playfair Display", Georgia, serif;
+}
+
+.font-headline {
+  font-family: var(--font-oswald), "Oswald", "Arial Narrow", sans-serif;
+}
+
+.font-body {
+  font-family: var(--font-inter), "Inter", system-ui, -apple-system, sans-serif;
+}
+
+.font-script {
+  font-family: var(--font-caveat), "Caveat", cursive;
+}
+
+/* Custom scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bone-cream);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--infield-tan);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--tobacco-leather);
+}
+
+::-webkit-scrollbar-corner {
+  background: var(--bone-cream);
+}
+
+/* Firefox scrollbar styling */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--infield-tan) var(--bone-cream);
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: #0A1A2F;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #1C2E4A;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #2E5D3A;
+}
+
+.dark ::-webkit-scrollbar-corner {
+  background: #0A1A2F;
+}
+
+.dark * {
+  scrollbar-color: #1C2E4A #0A1A2F;
+}
