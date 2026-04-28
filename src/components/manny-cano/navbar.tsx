@@ -145,15 +145,11 @@ export function Navbar() {
       <nav className="sticky top-0 z-40 bg-white shadow-sm">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 lg:px-8">
           {/* Left: Logo */}
-          <a href="/" className="flex items-center gap-2 group">
+          <a href="/" className="flex items-center group">
             <MCLogo
-              size="md"
-              variant="dark"
-              className="transition-transform group-hover:scale-110"
+              height={38}
+              className="transition-transform group-hover:scale-105"
             />
-            <span className="font-headline text-xl uppercase tracking-wider text-diamond-navy">
-              MANNY CANÓ
-            </span>
           </a>
 
           {/* Center: Desktop Nav */}
@@ -273,7 +269,7 @@ export function Navbar() {
         >
           <SheetHeader className="border-b border-bone-cream px-4 py-4">
             <div className="flex items-center gap-2">
-              <MCLogo size="sm" variant="dark" />
+              <MCLogo height={24} iconOnly />
               <SheetTitle className="font-headline text-lg uppercase tracking-wider text-diamond-navy">
                 {t('mobile.menu')}
               </SheetTitle>

@@ -155,12 +155,7 @@ export function Footer() {
         <div className="mx-auto max-w-7xl">
           {/* Logo + Tagline */}
           <div className="mb-10 flex flex-col items-center gap-3 text-center md:flex-row md:text-left">
-            <div className="flex items-center gap-2">
-              <MCLogo size="md" variant="white" />
-              <span className="font-headline text-xl uppercase tracking-wider text-bone-cream">
-                MANNY CANÓ
-              </span>
-            </div>
+            <MCLogo height={42} invert />
             <p className="text-sm text-bone-cream/60 md:ml-4">
               {t('footer.tagline')}
             </p>

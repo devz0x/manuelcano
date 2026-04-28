@@ -37,7 +37,7 @@ export const metadata: Metadata = {
   description:
     "Premium gloves, bats, balls, bags, and catcher gear. Designed in the Dominican Republic for the serious player. Free US shipping on $100+.",
   icons: {
-    icon: "https://z-cdn.chatglm.cn/z-ai/static/logo.svg",
+    icon: "/img/brand/logo.jpg",
   },
   openGraph: {
     title: "Manny Cano | Professional Baseball Equipment",

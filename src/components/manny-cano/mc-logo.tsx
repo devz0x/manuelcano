@@ -1,40 +1,58 @@
+'use client';
+
+import Image from 'next/image';
+
+/* ─────────────────────────────────────────────────────────────── */
+/*  Full Logo (icon + "MANNY CANÓ" text) — uses the actual JPG    */
+/* ─────────────────────────────────────────────────────────────── */
+
 interface MCLogoProps {
   className?: string;
-  size?: 'sm' | 'md' | 'lg' | 'xl';
-  variant?: 'light' | 'dark' | 'white';
+  height?: number;
+  /** On dark backgrounds, the logo inverts to white */
+  invert?: boolean;
+  /** Use icon-only version (just the M mark, no text) */
+  iconOnly?: boolean;
 }
 
-const sizeMap = {
-  sm: { width: 24, height: 24 },
-  md: { width: 32, height: 32 },
-  lg: { width: 40, height: 40 },
-  xl: { width: 56, height: 56 },
-};
-
-const colorMap = {
-  light: '#F4EFE6',
-  dark: '#0A1A2F',
-  white: '#FFFFFF',
-};
-
-export function MCLogo({ className, size = 'md', variant = 'dark' }: MCLogoProps) {
-  const { width, height } = sizeMap[size];
-  const color = colorMap[variant];
+export function MCLogo({
+  className,
+  height = 36,
+  invert = false,
+  iconOnly = false,
+}: MCLogoProps) {
+  /* The full logo JPG has icon + "MANNY CANÓ" text stacked vertically.
+     The icon occupies roughly the top 45% of the image. */
+  const iconHeight = Math.round(height);
+  const fullHeight = iconOnly ? iconHeight : Math.round(height * 1.8);
 
   return (
-    <svg
-      viewBox="0 0 100 100"
-      width={width}
-      height={height}
-      className={className}
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
+    <div
+      className={`relative flex-shrink-0 ${className || ''}`}
+      style={{
+        width: iconOnly ? iconHeight : Math.round(fullHeight * 0.72),
+        height: fullHeight,
+      }}
     >
-      {/* Geometric angular "M" - Manny Canó logo */}
-      <path
-        d="M10 85L10 15L35 55L50 30L65 55L90 15L90 85L75 85L75 45L60 65L50 50L40 65L25 45L25 85Z"
-        fill={color}
+      <Image
+        src="/img/brand/logo.jpg"
+        alt="Manny Canó"
+        fill
+        className={`object-contain ${
+          invert
+            ? 'brightness-0 invert'
+            : ''
+        }`}
+        priority={false}
+        sizes={`${fullHeight}px`}
       />
-    </svg>
+      {/* When iconOnly, clip the bottom portion showing text */}
+      {iconOnly && (
+        <div
+          className="absolute bottom-0 left-0 right-0 bg-inherit"
+          style={{ height: '45%' }}
+        />
+      )}
+    </div>
   );
 }

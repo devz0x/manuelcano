@@ -60,7 +60,7 @@ export function CartDrawer() {
           /* Empty State */
           <div className="flex flex-1 flex-col items-center justify-center gap-4 px-6 text-center">
             <div className="flex size-20 items-center justify-center rounded-full bg-bone-cream">
-              <MCLogo size="lg" variant="light" />
+              <MCLogo height={48} iconOnly />
             </div>
             <div>
               <p className="font-headline text-lg uppercase tracking-wide text-dugout-charcoal">
@@ -98,7 +98,7 @@ export function CartDrawer() {
                           />
                         ) : (
                           <div className="flex size-full items-center justify-center">
-                            <MCLogo size="md" variant="light" />
+                            <MCLogo height={32} iconOnly />
                           </div>
                         )}
                       </div>
