@@ -22,8 +22,14 @@ import { PressBar } from '@/components/manny-cano/press-bar';
 import { ShopPage } from '@/components/manny-cano/shop-page';
 import { ProductPage } from '@/components/manny-cano/product-page';
 import { AboutPage } from '@/components/manny-cano/about-page';
+import { AthletesPage } from '@/components/manny-cano/athletes-page';
+import { TechnologyPage } from '@/components/manny-cano/technology-page';
+import { ContactPage } from '@/components/manny-cano/contact-page';
+import { BlogPage } from '@/components/manny-cano/blog-page';
+import { BlogPostPage } from '@/components/manny-cano/blog-post-page';
 import { CartPage } from '@/components/manny-cano/cart-page';
 import { CheckoutPage } from '@/components/manny-cano/checkout-page';
+import { CustomGlovePage } from '@/components/manny-cano/custom-glove-page';
 
 import { useState, useEffect } from 'react';
 
@@ -54,6 +60,18 @@ function ViewRouter() {
       return <ProductPage />;
     case 'about':
       return <AboutPage />;
+    case 'athletes':
+      return <AthletesPage />;
+    case 'technology':
+      return <TechnologyPage />;
+    case 'contact':
+      return <ContactPage />;
+    case 'blog':
+      return <BlogPage />;
+    case 'blogPost':
+      return <BlogPostPage />;
+    case 'configurator':
+      return <CustomGlovePage />;
     case 'cart':
       return <CartPage />;
     case 'checkout':
@@ -98,6 +116,12 @@ export default function Home() {
       shop: 'Shop All | Manny Canó',
       product: 'Product | Manny Canó',
       about: 'Our Story | Manny Canó',
+      athletes: 'Athletes | Manny Canó',
+      technology: 'Technology | Manny Canó',
+      contact: 'Contact | Manny Canó',
+      blog: 'Blog | Manny Canó',
+      blogPost: 'Blog | Manny Canó',
+      configurator: 'Custom Glove | Manny Canó',
       cart: 'Cart | Manny Canó',
       checkout: 'Checkout | Manny Canó',
       search: 'Search | Manny Canó',

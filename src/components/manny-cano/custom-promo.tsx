@@ -57,7 +57,7 @@ export function CustomPromo() {
 
         {/* CTA Button */}
         <motion.button
-          onClick={() => navigate('shop')}
+          onClick={() => navigate('configurator')}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           className="mt-8 inline-block bg-stadium-crimson px-10 py-4 font-headline uppercase tracking-wider text-white transition-colors hover:bg-stadium-crimson/90"

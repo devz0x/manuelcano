@@ -156,7 +156,25 @@ export function Footer() {
       case 'footer.ourHistory':
         navigate('about');
         break;
-      // Other brand links don't have pages yet
+      case 'footer.athletes':
+        navigate('athletes');
+        break;
+      case 'footer.technology':
+        navigate('technology');
+        break;
+      case 'footer.sustainability':
+        navigate('about');
+        break;
+    }
+  };
+
+  const handleCommunityLink = (linkKey: string) => {
+    switch (linkKey) {
+      case 'footer.blog':
+        navigate('blog');
+        break;
+      default:
+        break;
     }
   };
 
@@ -240,7 +258,7 @@ export function Footer() {
               </h3>
               <ul className="space-y-2.5">
                 {supportLinks.map((linkKey) => (
-                  <FooterLink key={linkKey}>
+                  <FooterLink key={linkKey} onClick={() => linkKey === 'footer.faq' ? navigate('contact') : undefined}>
                     {t(linkKey)}
                   </FooterLink>
                 ))}
@@ -254,7 +272,7 @@ export function Footer() {
               </h3>
               <ul className="space-y-2.5">
                 {communityLinks.map((linkKey) => (
-                  <FooterLink key={linkKey}>
+                  <FooterLink key={linkKey} onClick={() => handleCommunityLink(linkKey)}>
                     {t(linkKey)}
                   </FooterLink>
                 ))}

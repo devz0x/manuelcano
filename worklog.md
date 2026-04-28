@@ -102,3 +102,206 @@ Stage Summary:
 - Category images updated: Guantes = real glove, Mochilas = real navy backpack
 - ESLint: 0 errors, 0 warnings
 - Dev server: compiled clean, all routes 200 OK
+
+---
+Task ID: 4-a
+Agent: Frontend Developer
+Task: Create Athletes page component (src/components/manny-cano/athletes-page.tsx)
+
+Work Log:
+- Created athletes-page.tsx following exact same pattern as about-page.tsx (animation helpers, AnimatedSection, FadeUp, useI18n, useNavigationStore)
+- Added 80+ athletes translation keys to EN section of i18n.tsx (ES translations already existed from previous agent)
+- Built 6 sections: Breadcrumb, Hero with dark overlay, Featured Athletes Grid (3x2 with 6 athlete cards), Stats Banner (navy strip with 4 stats), Athlete Spotlight (large layout with quote/bio/stats/equipment), Cantera Program (dark bg with gold accents), CTA Section
+- Each athlete card: colored avatar with initials, name, position badge, team, quote, equipment, social icon links
+- Spotlight section: left image area, right content with quote, bio, 4 stat boxes, equipment list, social buttons
+- Responsive design: 1 col mobile, 2 col tablet, 3 col desktop for athlete grid
+- All text uses i18n translation keys via t('athletes.*')
+- Uses existing shadcn/ui components (Card, Badge, Button, Separator)
+- Uses lucide-react icons (Instagram, Twitter, Quote, Trophy, Users, Globe, Award, GraduationCap, Heart, ArrowRight)
+- Brand color system used throughout: diamond-navy, stadium-crimson, gold-glove, bone-cream, tobacco-leather, dugout-charcoal
+
+Stage Summary:
+- Athletes page component created at src/components/manny-cano/athletes-page.tsx
+- 80+ EN translation keys added to i18n.tsx (matching existing ES translations)
+- 6 athletes featured: Manny Reyes (SS), Carlos Gómez (2B), Josué Martínez (C), Roberto Sánchez (OF), David Arias (P), Miguel Torres (1B)
+- ESLint: 0 errors, 0 warnings
+- Dev server: compiled clean, no errors
+
+---
+Task ID: 4-d
+Agent: Full-Stack Developer
+Task: Create Contact page component and Contact API
+
+Work Log:
+- Created Contact API route (src/app/api/contact/route.ts):
+  - POST endpoint accepting name, email, subject, message
+  - Validates required fields (name, email, message) and email format
+  - Returns structured JSON responses with success/error states
+  - Graceful error handling with try/catch
+- Created Contact Page component (src/components/manny-cano/contact-page.tsx):
+  - 6 sections: Breadcrumb, Hero, Contact Form + Info sidebar, Contact Info Cards, FAQ Accordion, Social Media Strip
+  - Two-column form layout (form left, contact info right)
+  - Subject dropdown with 7 options using shadcn Select component
+  - Form validation with inline error messages
+  - Submit with loading state (Loader2 spinner)
+  - Toast notifications on success/error using useToast()
+  - 3 contact info cards (Email, Phone, Address) using shadcn Card
+  - 6 FAQ items using shadcn Accordion (collapsible)
+  - Social media links row (Instagram, YouTube, Twitter, Facebook)
+  - Framer Motion animations throughout (fadeUp, staggerContainer)
+  - Fully responsive design (mobile-first)
+  - Brand color classes and font classes used consistently
+- Added ~100 new translation keys per locale (ES/EN) for contact page
+- Updated navigation store: added 'contact' to ViewType union
+- Updated page.tsx: imported ContactPage, added case to ViewRouter, added title
+
+Stage Summary:
+- Contact page fully functional with 6 sections
+- Contact API validates and processes form submissions
+- All text bilingual (ES/EN) with ~100 new translation keys
+- ESLint: 0 errors, 0 warnings
+- Dev server: compiled clean, all routes 200 OK
+- Contact API tested: success response for valid data, 400 for invalid/missing fields
+
+---
+Task ID: 4-b
+Agent: Frontend Developer
+Task: Create Technology page component for MANNY CANÓ e-commerce site
+
+Work Log:
+- Created Technology page component at src/components/manny-cano/technology-page.tsx
+- Followed exact same pattern as About page (animation helpers, breadcrumb, framer motion, useI18n, useNavigationStore)
+- Built 6 visual sections: Hero, Leather Curing Process (4-step timeline), Pro-Fit System (two-column), Materials Comparison (table with checkmarks/X), Innovation Lab (dark overlay with 3 pillars), CTA
+- Added 52 technology.* translation keys per locale (ES/EN) to src/lib/i18n.tsx
+- Used real product images: mc-pro-glove-detail.jpg (hero), mc-glove-main.jpg (pro-fit), mc-gloves-collection-turf.jpg (innovation)
+- Used shadcn/ui components: Card, Badge, Button, Table/TableBody/TableCell/TableHead/TableHeader/TableRow
+- Used lucide-react icons: Eye, Droplets, Scissors, Hand, CheckCircle, XCircle, Cpu, MessageSquare, Leaf, ChevronRight
+- All text internationalized with useI18n() hook
+- Responsive design with mobile-first approach
+
+Stage Summary:
+- Technology page component complete with 6 sections and full bilingual support
+- 52 new translation keys added (104 total across ES/EN)
+- ESLint: 0 errors, 0 warnings
+- Dev server: compiled clean
+
+---
+Task ID: 4-c
+Agent: Full-Stack Developer
+Task: Create Blog listing page, Blog post page, and Blog API
+
+Work Log:
+- Created Blog API route (src/app/api/blog/route.ts):
+  - GET endpoint returning 6 blog posts with full bilingual content (EN/ES)
+  - Posts cover: glove care, DR baseball academies, bat selection, catcher gear, Dominican pipeline history, training tips
+  - Each post has 3-4 paragraphs of content in both English and Spanish
+  - Uses real product images from /img/products/ directory
+  - Categories: Equipment, Training, Culture, Tips
+  - Structured data: id, slug, title, titleEs, excerpt, excerptEs, content, contentEs, author, date, readTime, category, image, tags
+- Created Blog listing page (src/components/manny-cano/blog-page.tsx):
+  - Breadcrumb navigation (Home > Blog)
+  - Hero section with dark navy overlay and background image
+  - Featured post displayed as large two-column card (image + content side-by-side)
+  - Category filter tabs (All, Equipment, Training, Culture, Tips) with sticky positioning
+  - Grid of remaining posts: 2-col mobile, 3-col desktop
+  - Each post card: image, category badge, title, excerpt, author, date, read time
+  - Loading skeleton states and empty state handling
+  - Load More pagination button
+  - Framer Motion animations (fadeUp, staggerContainer, useInView)
+  - Navigation to blog post via navigate('blogPost', { slug })
+- Created Blog post page (src/components/manny-cano/blog-post-page.tsx):
+  - Breadcrumb navigation (Home > Blog > Post Title)
+  - Full article layout: category badge, title, meta info (author, date, read time)
+  - Featured 16:9 aspect ratio image
+  - HTML content rendered with styled typography (paragraphs, h3 subheadings)
+  - Share button with Web Share API / clipboard fallback
+  - Tags section with hashtag display
+  - Author bio card with avatar initial, name, and description
+  - Related posts section (3 cards, prioritized by same category)
+  - Back to Blog button (top + bottom)
+  - Not found state with helpful messaging
+  - Loading skeleton for post
+- Updated navigation store: added 'blog' and 'blogPost' to ViewType union
+- Updated page.tsx: imported BlogPage and BlogPostPage, added cases to ViewRouter, added page titles
+- Added 36 blog.* and blogPost.* translation keys per locale (ES/EN) to i18n.tsx
+
+Stage Summary:
+- Blog system fully functional with listing + detail views
+- 6 blog posts with 3-4 paragraphs each in English and Spanish
+- Blog listing with featured post, category filters, grid layout, and load more
+- Blog post page with rich article layout, author bio, related posts, share functionality
+- All navigation wired through Zustand store
+- All text bilingual (ES/EN) with 36 new translation keys per locale
+- ESLint: 0 errors, 0 warnings
+- Dev server: compiled clean, all routes 200 OK
+- Blog API tested: returns 6 posts with correct slugs
+
+---
+Task ID: 5
+Agent: Frontend Developer
+Task: Create Custom Glove Configurator page component (src/components/manny-cano/custom-glove-page.tsx)
+
+Work Log:
+- Created Custom Glove Configurator page at src/components/manny-cano/custom-glove-page.tsx
+- Followed exact same pattern as About page (animation helpers, AnimatedSection, FadeUp, useI18n, useNavigationStore)
+- Built interactive 6-step glove configurator with real-time SVG preview:
+  - Step 1 (Style): Select glove type - Infield, Outfield, First Base, Catcher Mitt, Pitcher
+  - Step 2 (Leather): Select leather type - Premium Roebuck ($499), Kip Leather ($599), Steerhide ($399)
+  - Step 3 (Colors): Color pickers for 5 parts (Palm, Back, Web, Lacing, Wrist) with 8 color options each
+  - Step 4 (Web): Select web pattern - I-Web, H-Web, Trapeze, Modified Trapeze, Single Post, Basket Web, Cross Bar
+  - Step 5 (Personalize): Name (max 15 chars), Number (max 3 digits), Embroidery color (4 options), Position dropdown
+  - Step 6 (Summary): Complete config overview, price calculation ($50 embroidery fee), Add to Cart + Save Design buttons
+- Created detailed SVG glove illustration with 5 colorable parts that animate smoothly on color changes:
+  - Palm area with gradient fill
+  - Back of hand with finger outlines
+  - Web area with 7 distinct pattern renders (I-Web lines, H-Web posts, Trapeze loops, Closed web for pitcher/catcher, Basket weave, Single post, Cross bar)
+  - Lacing detail lines (dashed stitching along pocket, edge, and wrist)
+  - Wrist strap with buckle and stitching details
+  - Dynamic personalization text (name/number) in chosen embroidery color
+- Two-column responsive layout: SVG preview (60%) + Config panel (40%), stacks on mobile
+- Step indicator with icons (Hand, Settings, Palette, Layers, Type, CheckCircle)
+- Navigation buttons: Previous, Next, Start Over
+- Features strip: 4 badges (Handcrafted, 6-8 Week Delivery, Pro Warranty, Free Engraving)
+- Add to Cart integration with useCartStore and toast notification
+- Save Design button with toast feedback
+- Added 66 configurator.* translation keys per locale (ES/EN) to src/lib/i18n.tsx
+- Used shadcn/ui components: Card, Button, Badge, Input, Separator
+- Used lucide-react icons: ChevronRight, ChevronLeft, RotateCcw, ShoppingCart, Save, Palette, Hand, Layers, Type, CheckCircle, Shield, Clock, Award, Settings
+- CSS transitions on all color changes (0.5s ease) for smooth visual updates
+- Framer Motion AnimatePresence for step content transitions
+
+Stage Summary:
+- Custom Glove Configurator page fully interactive with 6-step flow
+- SVG glove visualization with 5 colorable parts and 7 web pattern styles
+- Price calculation: leather base price + $50 embroidery fee when personalized
+- All text bilingual (ES/EN) with 66 new translation keys per locale
+- ESLint: 0 errors, 0 warnings
+- Dev server: compiled clean, all routes 200 OK
+
+---
+Task ID: 6
+Agent: Main Orchestrator
+Task: Wire all new pages into navigation, footer, navbar, and hero CTAs
+
+Work Log:
+- Updated navigation-store.ts: Added 'athletes', 'technology', 'configurator' to ViewType union (now 12 view types total)
+- Updated page.tsx: Imported AthletesPage, TechnologyPage, CustomGlovePage; added ViewRouter cases; added document titles for all new views
+- Updated footer.tsx:
+  - handleBrandLink() now routes footer.athletes → athletes, footer.technology → technology, footer.sustainability → about
+  - Added handleCommunityLink() for footer.blog → blog
+  - FAQ support link routes to contact page
+- Updated navbar.tsx:
+  - Added Users, Cpu, BookOpen, Mail icon imports
+  - Mobile nav now includes 7 links: Our History, Athletes, Technology, Blog, Contact, Search, Cart
+- Updated custom-promo.tsx: CTA button now navigates to 'configurator' instead of 'shop'
+- Updated hero-section.tsx: "Design Your Glove" CTA now navigates to 'configurator' instead of anchor link
+
+Stage Summary:
+- All 12 views fully routed: home, shop, product, about, athletes, technology, contact, blog, blogPost, configurator, cart, checkout, search
+- Footer links for Brand (History, Athletes, Technology, Sustainability) all functional
+- Footer links for Community (Blog) functional
+- Footer Support FAQ links to Contact page
+- Mobile nav includes all brand/content pages
+- Homepage CTAs (Hero + Custom Promo) navigate to configurator
+- ESLint: 0 errors, 0 warnings
+- Dev server: compiled clean

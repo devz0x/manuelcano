@@ -7,6 +7,10 @@ import {
   ShoppingBag,
   Menu,
   ChevronDown,
+  Users,
+  Cpu,
+  BookOpen,
+  Mail,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -357,6 +361,46 @@ export function Navbar({ onSearchOpen }: NavbarProps) {
               >
                 <User className="size-4" />
                 {t('footer.ourHistory')}
+              </button>
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  navigate('athletes');
+                }}
+                className="flex items-center gap-2 text-sm text-dugout-charcoal transition-colors hover:text-stadium-crimson"
+              >
+                <Users className="size-4" />
+                {t('footer.athletes')}
+              </button>
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  navigate('technology');
+                }}
+                className="flex items-center gap-2 text-sm text-dugout-charcoal transition-colors hover:text-stadium-crimson"
+              >
+                <Cpu className="size-4" />
+                {t('footer.technology')}
+              </button>
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  navigate('blog');
+                }}
+                className="flex items-center gap-2 text-sm text-dugout-charcoal transition-colors hover:text-stadium-crimson"
+              >
+                <BookOpen className="size-4" />
+                {t('footer.blog')}
+              </button>
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  navigate('contact');
+                }}
+                className="flex items-center gap-2 text-sm text-dugout-charcoal transition-colors hover:text-stadium-crimson"
+              >
+                <Mail className="size-4" />
+                {t('contact.breadcrumb.contact')}
               </button>
               <button
                 onClick={() => {

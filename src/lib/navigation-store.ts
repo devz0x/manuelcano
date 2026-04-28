@@ -5,6 +5,12 @@ export type ViewType =
   | 'shop'
   | 'product'
   | 'about'
+  | 'athletes'
+  | 'technology'
+  | 'contact'
+  | 'blog'
+  | 'blogPost'
+  | 'configurator'
   | 'cart'
   | 'checkout'
   | 'search';

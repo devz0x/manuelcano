@@ -69,12 +69,12 @@ export function HeroSection() {
           >
             {t('hero.cta1')}
           </button>
-          <a
-            href="#custom"
+          <button
+            onClick={() => navigate('configurator')}
             className="border-2 border-white/50 px-8 py-3 font-headline uppercase tracking-wider text-white transition-colors hover:border-white"
           >
             {t('hero.cta2')}
-          </a>
+          </button>
         </motion.div>
       </div>
 
