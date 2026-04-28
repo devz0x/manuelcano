@@ -1,6 +1,6 @@
 'use client';
 
-import { Minus, Plus, ShoppingBag, Trash2 } from 'lucide-react';
+import { Minus, Plus, Trash2 } from 'lucide-react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
@@ -12,13 +12,15 @@ import {
   SheetTitle,
 } from '@/components/ui/sheet';
 import { useCartStore } from '@/lib/store';
+import { useI18n } from '@/lib/i18n';
+import { MCLogo } from './mc-logo';
 
 /* ------------------------------------------------------------------ */
-/*  Price formatter                                                     */
+/*  Price formatter (USD)                                               */
 /* ------------------------------------------------------------------ */
 
 function formatPrice(amount: number): string {
-  return `RD$${amount.toLocaleString('es-DO', { minimumFractionDigits: 0 })}`;
+  return `$${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 }
 
 /* ------------------------------------------------------------------ */
@@ -26,6 +28,7 @@ function formatPrice(amount: number): string {
 /* ------------------------------------------------------------------ */
 
 export function CartDrawer() {
+  const { t } = useI18n();
   const items = useCartStore((s) => s.items);
   const isOpen = useCartStore((s) => s.isOpen);
   const closeCart = useCartStore((s) => s.closeCart);
@@ -44,10 +47,10 @@ export function CartDrawer() {
         {/* Header */}
         <SheetHeader className="border-b border-bone-cream px-6 py-4">
           <SheetTitle className="font-headline text-lg uppercase tracking-wider text-diamond-navy">
-            Tu Carrito
+            {t('cart.title')}
             {items.length > 0 && (
               <span className="ml-2 text-sm font-body normal-case tracking-normal text-tobacco-leather">
-                ({items.length} {items.length === 1 ? 'artículo' : 'artículos'})
+                ({items.length} {items.length === 1 ? t('cart.item') : t('cart.items')})
               </span>
             )}
           </SheetTitle>
@@ -57,14 +60,14 @@ export function CartDrawer() {
           /* Empty State */
           <div className="flex flex-1 flex-col items-center justify-center gap-4 px-6 text-center">
             <div className="flex size-20 items-center justify-center rounded-full bg-bone-cream">
-              <ShoppingBag className="size-8 text-tobacco-leather/50" />
+              <MCLogo size="lg" variant="light" />
             </div>
             <div>
               <p className="font-headline text-lg uppercase tracking-wide text-dugout-charcoal">
-                Tu carrito está vacío
+                {t('cart.empty')}
               </p>
               <p className="mt-1 text-sm text-tobacco-leather">
-                Explora nuestra selección de equipamiento profesional.
+                {t('cart.emptyDesc')}
               </p>
             </div>
             <Button
@@ -72,7 +75,7 @@ export function CartDrawer() {
               className="mt-2 border-diamond-navy font-headline uppercase tracking-wide text-diamond-navy hover:bg-diamond-navy hover:text-white"
               onClick={closeCart}
             >
-              Seguir Comprando
+              {t('cart.continueShopping')}
             </Button>
           </div>
         ) : (
@@ -95,7 +98,7 @@ export function CartDrawer() {
                           />
                         ) : (
                           <div className="flex size-full items-center justify-center">
-                            <ShoppingBag className="size-6 text-tobacco-leather/30" />
+                            <MCLogo size="md" variant="light" />
                           </div>
                         )}
                       </div>
@@ -108,12 +111,12 @@ export function CartDrawer() {
                           </h4>
                           {item.size && (
                             <p className="text-xs text-tobacco-leather">
-                              Talla: {item.size}
+                              {t('cart.size')}: {item.size}
                             </p>
                           )}
                           {item.color && (
                             <p className="text-xs text-tobacco-leather">
-                              Color: {item.color}
+                              {t('cart.color')}: {item.color}
                             </p>
                           )}
                         </div>
@@ -129,7 +132,7 @@ export function CartDrawer() {
                                 updateQuantity(item.id, item.quantity - 1)
                               }
                               className="flex size-7 items-center justify-center rounded-md border border-bone-cream text-dugout-charcoal transition-colors hover:border-stadium-crimson hover:text-stadium-crimson"
-                              aria-label="Disminuir cantidad"
+                              aria-label="Decrease quantity"
                             >
                               <Minus className="size-3" />
                             </button>
@@ -141,7 +144,7 @@ export function CartDrawer() {
                                 updateQuantity(item.id, item.quantity + 1)
                               }
                               className="flex size-7 items-center justify-center rounded-md border border-bone-cream text-dugout-charcoal transition-colors hover:border-stadium-crimson hover:text-stadium-crimson"
-                              aria-label="Aumentar cantidad"
+                              aria-label="Increase quantity"
                             >
                               <Plus className="size-3" />
                             </button>
@@ -153,7 +156,7 @@ export function CartDrawer() {
                       <button
                         onClick={() => removeItem(item.id)}
                         className="self-start p-1 text-tobacco-leather/50 transition-colors hover:text-stadium-crimson"
-                        aria-label="Eliminar artículo"
+                        aria-label="Remove item"
                       >
                         <Trash2 className="size-4" />
                       </button>
@@ -171,7 +174,7 @@ export function CartDrawer() {
             <div className="border-t border-bone-cream px-6 py-5">
               <div className="mb-4 flex items-center justify-between">
                 <span className="font-headline text-sm uppercase tracking-wide text-tobacco-leather">
-                  Total
+                  {t('cart.total')}
                 </span>
                 <span className="font-headline text-xl tracking-wide text-diamond-navy">
                   {formatPrice(total())}
@@ -183,15 +186,15 @@ export function CartDrawer() {
                   variant="outline"
                   className="w-full border-diamond-navy font-headline uppercase tracking-wide text-diamond-navy hover:bg-diamond-navy hover:text-white"
                 >
-                  Ver Carrito
+                  {t('cart.viewCart')}
                 </Button>
                 <Button className="w-full bg-stadium-crimson font-headline uppercase tracking-wide text-white hover:bg-stadium-crimson/90">
-                  Checkout
+                  {t('cart.checkout')}
                 </Button>
               </div>
 
               <p className="mt-3 text-center text-xs text-tobacco-leather/70">
-                Envío y calculado en el checkout
+                {t('cart.shippingNote')}
               </p>
             </div>
           </>

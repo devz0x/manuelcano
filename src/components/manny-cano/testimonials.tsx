@@ -2,26 +2,12 @@
 
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
+import { useI18n } from '@/lib/i18n';
 
-const testimonials = [
-  {
-    quote:
-      'El mejor break-in que he sentido en años. Pocket perfecto desde el día 30.',
-    author: 'Pedro M.',
-    role: 'AAA, Sistema Yankees',
-  },
-  {
-    quote:
-      'Mi pelao usa el Cantera USA -10 y mejoró su average 80 puntos en una temporada.',
-    author: 'Carlos R.',
-    role: 'Coach LMD U-12',
-  },
-  {
-    quote:
-      'El peto Profesional aguanta foul tips como ningún otro que haya tenido.',
-    author: 'Rafael S.',
-    role: 'Catcher liga semipro',
-  },
+const testimonialKeyMap = [
+  { quoteKey: 'testimonials.quote1', authorKey: 'testimonials.author1', roleKey: 'testimonials.role1' },
+  { quoteKey: 'testimonials.quote2', authorKey: 'testimonials.author2', roleKey: 'testimonials.role2' },
+  { quoteKey: 'testimonials.quote3', authorKey: 'testimonials.author3', roleKey: 'testimonials.role3' },
 ];
 
 const containerVariants = {
@@ -43,6 +29,7 @@ const cardVariants = {
 };
 
 export function Testimonials() {
+  const { t } = useI18n();
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: '-80px' });
 
@@ -51,7 +38,7 @@ export function Testimonials() {
       <div className="mx-auto max-w-6xl">
         {/* Heading */}
         <h2 className="font-display text-3xl font-bold text-diamond-navy text-center md:text-4xl">
-          Lo que dice el clubhouse
+          {t('testimonials.title')}
         </h2>
 
         {/* Gold Separator */}
@@ -64,9 +51,9 @@ export function Testimonials() {
           animate={isInView ? 'visible' : 'hidden'}
           className="mt-12 grid grid-cols-1 gap-6 sm:mt-14 md:grid-cols-2 lg:grid-cols-3 lg:gap-8"
         >
-          {testimonials.map((testimonial) => (
+          {testimonialKeyMap.map((testimonial) => (
             <motion.div
-              key={testimonial.author}
+              key={testimonial.authorKey}
               variants={cardVariants}
               className="rounded-lg bg-white p-8 shadow-sm"
             >
@@ -77,7 +64,7 @@ export function Testimonials() {
 
               {/* Quote Text */}
               <p className="mt-2 text-base italic leading-relaxed text-dugout-charcoal/80">
-                {testimonial.quote}
+                {t(testimonial.quoteKey)}
               </p>
 
               {/* Divider */}
@@ -85,12 +72,12 @@ export function Testimonials() {
 
               {/* Author */}
               <p className="font-headline text-sm uppercase tracking-wider text-diamond-navy">
-                {testimonial.author}
+                {t(testimonial.authorKey)}
               </p>
 
               {/* Role */}
               <p className="mt-1 text-sm text-tobacco-leather">
-                {testimonial.role}
+                {t(testimonial.roleKey)}
               </p>
             </motion.div>
           ))}

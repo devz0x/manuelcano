@@ -1,4 +1,55 @@
 ---
+Task ID: 21-25
+Agent: Fullstack Developer
+Task: Bilingual i18n system, USD pricing, MC Logo, brand accent ó
+
+Work Log:
+- Created src/lib/i18n.tsx: Context-based i18n provider with full ES/EN translation dictionary
+  - I18nProvider wraps the app in layout.tsx
+  - useI18n() hook returns { locale, setLocale, t } for all components
+  - ~150 translation keys covering every section: utility bar, navigation (6 categories with subcategories), hero, categories, products, brand story, custom promo, tech strip, testimonials, press bar, cart, mobile nav, footer
+  - Default locale is 'es' (Spanish)
+- Created src/components/manny-cano/mc-logo.tsx: SVG "M" logo component
+  - 4 size variants: sm (24px), md (32px), lg (40px), xl (56px)
+  - 3 color variants: light, dark, white
+  - Geometric angular "M" path matching Manny Canó brand identity
+- Updated src/app/layout.tsx: Wrapped children with <I18nProvider>
+- Updated ALL 13 components to use useI18n() hook and replace hardcoded text:
+  - utility-bar.tsx: ES/EN toggle buttons now call setLocale() to switch languages
+  - navbar.tsx: Replaced Diamond icon with MCLogo, changed brand to "MANNY CANÓ", mega menu uses translation keys
+  - hero-section.tsx: All text via t() calls
+  - category-grid.tsx: Category names via t() keys
+  - product-card.tsx: Changed price format from RD$ to $USD, badge labels via t(), button text via t()
+  - featured-products.tsx: Section title, subtitle, view all link via t()
+  - brand-story.tsx: Label, headline, body, stats, CTA all via t()
+  - custom-promo.tsx: All text via t(), price changed from RD$ to USD
+  - tech-strip.tsx: Feature titles and descriptions via t() keys
+  - testimonials.tsx: Quotes, authors, roles all via t() keys
+  - press-bar.tsx: Section title via t()
+  - cart-drawer.tsx: ALL text via t(), prices in $USD, MCLogo in empty state
+  - footer.tsx: ALL text via t(), MCLogo replaces Diamond icon, brand name "MANNY CANÓ"
+- Updated src/app/api/products/route.ts: Changed all prices from DOP to USD
+  - MC Pro Glove: $329.99 (was 18999 DOP)
+  - MC Pro Bat: $159.99 (was 8999 DOP)
+  - MC Cantera Bat: $89.99 (was 4999 DOP)
+  - MC Catcher Set: $569.99 (was 32999 DOP)
+  - MC Pelotas Pro: $44.99 (was 2499 DOP)
+  - MC Backpack: $109.99 (was 5999 DOP)
+  - Compare-at prices updated similarly
+  - Collection price ranges updated to USD
+  - Product descriptions converted to English
+
+Stage Summary:
+- ESLint: 0 errors, 0 warnings
+- Dev server: compiled clean, GET / 200 OK, GET /api/products 200 OK
+- Full bilingual i18n system with ES/EN toggle in utility bar
+- All prices converted from RD$ (Dominican Pesos) to $ (USD)
+- Diamond icon replaced with custom MCLogo SVG component throughout
+- Brand name consistently uses "MANNY CANÓ" with accent
+- 2 new files created: i18n.tsx, mc-logo.tsx
+- 14 files updated: layout.tsx, 12 component files, API route
+
+---
 Task ID: 14
 Agent: Main Orchestrator
 Task: Final polish - TikTok icon, smooth scroll, press bar section, lint verification

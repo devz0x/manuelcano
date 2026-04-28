@@ -10,8 +10,9 @@ import {
   Truck,
   RotateCcw,
   Award,
-  Diamond,
 } from 'lucide-react';
+import { useI18n } from '@/lib/i18n';
+import { MCLogo } from './mc-logo';
 
 /* Custom TikTok icon since lucide-react doesn't have it */
 function TikTokIcon({ className }: { className?: string }) {
@@ -35,58 +36,6 @@ import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/hooks/use-toast';
 
 /* ------------------------------------------------------------------ */
-/*  Footer Column Data                                                  */
-/* ------------------------------------------------------------------ */
-
-interface FooterColumn {
-  title: string;
-  links: string[];
-}
-
-const footerColumns: FooterColumn[] = [
-  {
-    title: 'Comprar',
-    links: ['Guantes', 'Bates', 'Catcher', 'Pelotas', 'Mochilas', 'Accesorios'],
-  },
-  {
-    title: 'La Marca',
-    links: ['Nuestra Historia', 'Atletas', 'Tecnología', 'Sustentabilidad'],
-  },
-  {
-    title: 'Soporte',
-    links: [
-      'Guía de Tallas',
-      'Cuidado del Guante',
-      'Envíos',
-      'Devoluciones',
-      'Garantía',
-      'FAQ',
-    ],
-  },
-  {
-    title: 'Comunidad',
-    links: [
-      'Programa Cantera',
-      'Patrocinio',
-      'Showcases',
-      'Blog',
-      'MC Rewards',
-    ],
-  },
-];
-
-/* ------------------------------------------------------------------ */
-/*  Trust Badges Data                                                   */
-/* ------------------------------------------------------------------ */
-
-const trustBadges = [
-  { icon: ShieldCheck, label: 'Pago Seguro' },
-  { icon: Truck, label: 'Envío RD' },
-  { icon: RotateCcw, label: 'Devoluciones 30 días' },
-  { icon: Award, label: 'Garantía Pro' },
-];
-
-/* ------------------------------------------------------------------ */
 /*  Social Links                                                        */
 /* ------------------------------------------------------------------ */
 
@@ -103,6 +52,7 @@ const socialLinks = [
 /* ------------------------------------------------------------------ */
 
 function NewsletterSection() {
+  const { t } = useI18n();
   const [email, setEmail] = useState('');
   const { toast } = useToast();
 
@@ -110,8 +60,8 @@ function NewsletterSection() {
     e.preventDefault();
     if (!email.trim()) return;
     toast({
-      title: '¡Bienvenido al Roster!',
-      description: 'Te suscribiste exitosamente. Revisa tu correo.',
+      title: t('footer.subscribed'),
+      description: t('footer.subscribedDesc'),
     });
     setEmail('');
   };
@@ -120,10 +70,10 @@ function NewsletterSection() {
     <section className="bg-bone-cream px-6 py-12">
       <div className="mx-auto max-w-7xl text-center">
         <h2 className="font-display text-3xl font-bold text-diamond-navy md:text-4xl">
-          Entra al Roster.
+          {t('footer.newsletterTitle')}
         </h2>
         <p className="mx-auto mt-3 max-w-md text-sm text-tobacco-leather md:text-base">
-          Drops de productos, lanzamientos de atletas y descuentos exclusivos.
+          {t('footer.newsletterDesc')}
         </p>
         <form
           onSubmit={handleSubmit}
@@ -141,7 +91,7 @@ function NewsletterSection() {
             type="submit"
             className="h-11 bg-diamond-navy font-headline uppercase tracking-wide text-bone-cream hover:bg-diamond-navy/90"
           >
-            Suscribirme
+            {t('footer.subscribe')}
           </Button>
         </form>
       </div>
@@ -154,6 +104,47 @@ function NewsletterSection() {
 /* ------------------------------------------------------------------ */
 
 export function Footer() {
+  const { t } = useI18n();
+
+  const footerColumns = [
+    {
+      titleKey: 'footer.shop',
+      linkKeys: ['nav.gloves', 'nav.bats', 'nav.catcher', 'nav.balls', 'nav.bags', 'nav.accessories'],
+    },
+    {
+      titleKey: 'footer.brand',
+      linkKeys: ['footer.ourHistory', 'footer.athletes', 'footer.technology', 'footer.sustainability'],
+    },
+    {
+      titleKey: 'footer.support',
+      linkKeys: [
+        'footer.sizeGuide',
+        'footer.gloveCare',
+        'footer.shipping',
+        'footer.returns',
+        'footer.warranty',
+        'footer.faq',
+      ],
+    },
+    {
+      titleKey: 'footer.community',
+      linkKeys: [
+        'footer.canteraProgram',
+        'footer.sponsorship',
+        'footer.showcases',
+        'footer.blog',
+        'footer.rewards',
+      ],
+    },
+  ];
+
+  const trustBadgeItems = [
+    { icon: ShieldCheck, labelKey: 'footer.trustPayment' },
+    { icon: Truck, labelKey: 'footer.trustShipping' },
+    { icon: RotateCcw, labelKey: 'footer.trustReturns' },
+    { icon: Award, labelKey: 'footer.trustWarranty' },
+  ];
+
   return (
     <footer className="mt-auto">
       {/* Newsletter */}
@@ -165,32 +156,31 @@ export function Footer() {
           {/* Logo + Tagline */}
           <div className="mb-10 flex flex-col items-center gap-3 text-center md:flex-row md:text-left">
             <div className="flex items-center gap-2">
-              <Diamond className="size-5 text-gold-glove" />
+              <MCLogo size="md" variant="white" />
               <span className="font-headline text-xl uppercase tracking-wider text-bone-cream">
-                Manny Cano
+                MANNY CANÓ
               </span>
             </div>
             <p className="text-sm text-bone-cream/60 md:ml-4">
-              Equipamiento de béisbol profesional. Diseñado en República
-              Dominicana para el jugador serio.
+              {t('footer.tagline')}
             </p>
           </div>
 
           {/* 4-column grid */}
           <div className="grid grid-cols-2 gap-8 md:grid-cols-4 md:gap-12">
             {footerColumns.map((col) => (
-              <div key={col.title}>
+              <div key={col.titleKey}>
                 <h3 className="mb-4 font-headline text-xs uppercase tracking-widest text-gold-glove">
-                  {col.title}
+                  {t(col.titleKey)}
                 </h3>
                 <ul className="space-y-2.5">
-                  {col.links.map((link) => (
-                    <li key={link}>
+                  {col.linkKeys.map((linkKey) => (
+                    <li key={linkKey}>
                       <a
                         href="#"
                         className="text-sm text-bone-cream/60 transition-colors hover:text-white"
                       >
-                        {link}
+                        {t(linkKey)}
                       </a>
                     </li>
                   ))}
@@ -201,14 +191,14 @@ export function Footer() {
 
           {/* Trust Badges */}
           <div className="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-4">
-            {trustBadges.map((badge) => (
+            {trustBadgeItems.map((badge) => (
               <div
-                key={badge.label}
+                key={badge.labelKey}
                 className="flex items-center justify-center gap-2 rounded-lg border border-bone-cream/10 bg-bone-cream/5 px-3 py-3"
               >
                 <badge.icon className="size-4 text-gold-glove" />
                 <span className="text-xs font-medium text-bone-cream/80">
-                  {badge.label}
+                  {t(badge.labelKey)}
                 </span>
               </div>
             ))}
@@ -234,8 +224,7 @@ export function Footer() {
 
             {/* Copyright */}
             <p className="text-center text-xs text-bone-cream/40">
-              © {new Date().getFullYear()} Manny Cano. Todos los derechos
-              reservados.
+              {t('footer.copyright')}
             </p>
 
             {/* Legal Links */}
@@ -244,13 +233,13 @@ export function Footer() {
                 href="#"
                 className="text-xs text-bone-cream/40 transition-colors hover:text-bone-cream/70"
               >
-                Términos & Condiciones
+                {t('footer.terms')}
               </a>
               <a
                 href="#"
                 className="text-xs text-bone-cream/40 transition-colors hover:text-bone-cream/70"
               >
-                Privacidad
+                {t('footer.privacy')}
               </a>
             </div>
           </div>

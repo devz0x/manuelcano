@@ -2,8 +2,10 @@
 
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
+import { useI18n } from '@/lib/i18n';
 
 export function CustomPromo() {
+  const { t } = useI18n();
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
 
@@ -33,23 +35,22 @@ export function CustomPromo() {
       >
         {/* Label */}
         <p className="font-headline text-sm uppercase tracking-[0.3em] text-gold-glove">
-          Custom Pro-Fit
+          {t('custom.label')}
         </p>
 
         {/* Headline */}
         <h2 className="mt-6 font-display text-4xl font-bold text-white md:text-5xl">
-          Diseña tu guante. Pieza por pieza.
+          {t('custom.headline')}
         </h2>
 
         {/* Body */}
         <p className="mx-auto mt-6 max-w-2xl text-lg text-bone-cream/80">
-          Más de 40 partes personalizables: cuero, web, palma, lacing, color,
-          bordados. Entrega en 6-8 semanas. Construido para tus manos.
+          {t('custom.body')}
         </p>
 
         {/* Price Range */}
         <p className="mt-6 font-headline text-xl text-gold-glove">
-          RD$8,500 - RD$22,000
+          {t('custom.price')}
         </p>
 
         {/* CTA Button */}
@@ -59,7 +60,7 @@ export function CustomPromo() {
           whileTap={{ scale: 0.98 }}
           className="mt-8 inline-block bg-stadium-crimson px-10 py-4 font-headline uppercase tracking-wider text-white transition-colors hover:bg-stadium-crimson/90"
         >
-          Empezar diseño
+          {t('custom.cta')}
         </motion.a>
       </motion.div>
     </section>

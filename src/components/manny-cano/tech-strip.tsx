@@ -3,29 +3,15 @@
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
 import { Shield, Scissors, Target, Award } from 'lucide-react';
+import { useI18n } from '@/lib/i18n';
 
-const features = [
-  {
-    icon: Shield,
-    title: 'Cuero Premium Curado',
-    description: '12 meses de curado natural antes de cortar.',
-  },
-  {
-    icon: Scissors,
-    title: 'Costura Doble Reforzada',
-    description: 'Cada lacing pasa por 4 controles de tensión.',
-  },
-  {
-    icon: Target,
-    title: 'Pro-Fit System',
-    description:
-      'Patrones ajustados a la mano dominicana, ideales para el jugador latino.',
-  },
-  {
-    icon: Award,
-    title: 'Garantía Pro 1 Año',
-    description: 'Defectos de fábrica cubiertos. Sin letra chica.',
-  },
+const featureIcons = [Shield, Scissors, Target, Award];
+
+const featureKeyMap = [
+  { titleKey: 'tech.feature1Title', descKey: 'tech.feature1Desc' },
+  { titleKey: 'tech.feature2Title', descKey: 'tech.feature2Desc' },
+  { titleKey: 'tech.feature3Title', descKey: 'tech.feature3Desc' },
+  { titleKey: 'tech.feature4Title', descKey: 'tech.feature4Desc' },
 ];
 
 const containerVariants = {
@@ -47,6 +33,7 @@ const cardVariants = {
 };
 
 export function TechStrip() {
+  const { t } = useI18n();
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: '-80px' });
 
@@ -55,7 +42,7 @@ export function TechStrip() {
       <div className="mx-auto max-w-6xl">
         {/* Heading */}
         <h2 className="font-headline text-2xl uppercase tracking-wider text-diamond-navy text-center sm:text-3xl">
-          Por qué Manny Cano se siente diferente
+          {t('tech.title')}
         </h2>
 
         {/* Gold Separator */}
@@ -68,28 +55,31 @@ export function TechStrip() {
           animate={isInView ? 'visible' : 'hidden'}
           className="mt-12 grid grid-cols-2 gap-6 lg:grid-cols-4 lg:gap-8 sm:mt-14"
         >
-          {features.map((feature) => (
-            <motion.div
-              key={feature.title}
-              variants={cardVariants}
-              className="text-center"
-            >
-              {/* Icon */}
-              <div className="mx-auto flex h-[60px] w-[60px] items-center justify-center rounded-full bg-bone-cream">
-                <feature.icon className="h-8 w-8 text-tobacco-leather" />
-              </div>
+          {featureKeyMap.map((feature, i) => {
+            const Icon = featureIcons[i];
+            return (
+              <motion.div
+                key={feature.titleKey}
+                variants={cardVariants}
+                className="text-center"
+              >
+                {/* Icon */}
+                <div className="mx-auto flex h-[60px] w-[60px] items-center justify-center rounded-full bg-bone-cream">
+                  <Icon className="h-8 w-8 text-tobacco-leather" />
+                </div>
 
-              {/* Title */}
-              <h3 className="mt-4 font-headline text-xs uppercase tracking-wider text-diamond-navy sm:text-sm">
-                {feature.title}
-              </h3>
+                {/* Title */}
+                <h3 className="mt-4 font-headline text-xs uppercase tracking-wider text-diamond-navy sm:text-sm">
+                  {t(feature.titleKey)}
+                </h3>
 
-              {/* Description */}
-              <p className="mt-2 text-xs leading-relaxed text-dugout-charcoal/70 sm:text-sm">
-                {feature.description}
-              </p>
-            </motion.div>
-          ))}
+                {/* Description */}
+                <p className="mt-2 text-xs leading-relaxed text-dugout-charcoal/70 sm:text-sm">
+                  {t(feature.descKey)}
+                </p>
+              </motion.div>
+            );
+          })}
         </motion.div>
       </div>
     </section>

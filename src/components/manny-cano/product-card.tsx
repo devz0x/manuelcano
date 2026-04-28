@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import { Star, ShoppingBag } from 'lucide-react';
 import { useCartStore } from '@/lib/store';
+import { useI18n } from '@/lib/i18n';
 import { toast } from 'sonner';
 
 interface ProductCardProps {
@@ -17,23 +18,8 @@ interface ProductCardProps {
   slug: string;
 }
 
-const badgeConfig: Record<string, { label: string; className: string }> = {
-  bestseller: {
-    label: 'MÁS VENDIDO',
-    className: 'bg-stadium-crimson',
-  },
-  nuevo: {
-    label: 'NUEVO',
-    className: 'bg-field-green',
-  },
-  premium: {
-    label: 'PREMIUM',
-    className: 'bg-gold-glove',
-  },
-};
-
 function formatPrice(price: number): string {
-  return `RD$${price.toLocaleString('es-DO')}`;
+  return `$${price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 }
 
 function StarRating({ rating }: { rating: number }) {
@@ -63,8 +49,24 @@ export function ProductCard({
   reviewCount,
   badges,
 }: ProductCardProps) {
+  const { t } = useI18n();
   const addItem = useCartStore((state) => state.addItem);
   const openCart = useCartStore((state) => state.openCart);
+
+  const badgeConfig: Record<string, { labelKey: string; className: string }> = {
+    bestseller: {
+      labelKey: 'products.moreSold',
+      className: 'bg-stadium-crimson',
+    },
+    nuevo: {
+      labelKey: 'products.new',
+      className: 'bg-field-green',
+    },
+    premium: {
+      labelKey: 'products.premium',
+      className: 'bg-gold-glove',
+    },
+  };
 
   const badgeList = badges ? badges.split(',').map((b) => b.trim()) : [];
   const firstBadge = badgeConfig[badgeList[0]];
@@ -77,7 +79,7 @@ export function ProductCard({
       image,
     });
     openCart();
-    toast.success(`${name} agregado al carrito`);
+    toast.success(`${name} ${t('cart.added')}`);
   };
 
   return (
@@ -97,7 +99,7 @@ export function ProductCard({
           <span
             className={`absolute left-3 top-3 ${firstBadge.className} px-2.5 py-1 text-xs font-semibold uppercase tracking-wider text-white`}
           >
-            {firstBadge.label}
+            {t(firstBadge.labelKey)}
           </span>
         )}
       </div>
@@ -113,7 +115,7 @@ export function ProductCard({
         <div className="mt-2 flex items-center gap-2">
           <StarRating rating={rating} />
           <span className="text-xs text-muted-foreground">
-            ({reviewCount})
+            ({reviewCount} {t('products.reviews')})
           </span>
         </div>
 
@@ -135,7 +137,7 @@ export function ProductCard({
           className="mt-3 flex w-full items-center justify-center gap-2 bg-diamond-navy py-2 font-headline text-xs uppercase tracking-wider text-white transition-colors hover:bg-diamond-navy/90"
         >
           <ShoppingBag className="h-3.5 w-3.5" />
-          Agregar al Carrito
+          {t('products.addToCart')}
         </button>
       </div>
     </div>

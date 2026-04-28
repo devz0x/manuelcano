@@ -2,8 +2,11 @@
 
 import Image from 'next/image';
 import { motion } from 'framer-motion';
+import { useI18n } from '@/lib/i18n';
 
 export function HeroSection() {
+  const { t } = useI18n();
+
   return (
     <section className="relative flex min-h-screen items-center justify-center overflow-hidden">
       {/* Background Image */}
@@ -28,7 +31,7 @@ export function HeroSection() {
           transition={{ duration: 0.8, delay: 0.1 }}
           className="font-headline text-sm uppercase tracking-[0.3em] text-gold-glove"
         >
-          Hecho en la cuna del béisbol
+          {t('hero.tagline')}
         </motion.p>
 
         {/* Main Headline */}
@@ -38,7 +41,7 @@ export function HeroSection() {
           transition={{ duration: 0.8, delay: 0.2 }}
           className="mt-6 font-display text-5xl font-bold leading-tight text-white md:text-7xl lg:text-8xl"
         >
-          Del Play al Stadium.
+          {t('hero.headline')}
         </motion.h1>
 
         {/* Subheadline */}
@@ -48,8 +51,7 @@ export function HeroSection() {
           transition={{ duration: 0.8, delay: 0.4 }}
           className="mx-auto mt-6 max-w-2xl text-lg text-bone-cream/80 md:text-xl"
         >
-          Equipamiento de nivel profesional, forjado en la tierra que le ha dado
-          al béisbol más leyendas que ningún otro lugar del mundo.
+          {t('hero.subheadline')}
         </motion.p>
 
         {/* CTA Buttons */}
@@ -63,13 +65,13 @@ export function HeroSection() {
             href="#productos"
             className="bg-stadium-crimson px-8 py-3 font-headline uppercase tracking-wider text-white transition-colors hover:bg-stadium-crimson/90"
           >
-            Ver Línea Profesional
+            {t('hero.cta1')}
           </a>
           <a
             href="#custom"
             className="border-2 border-white/50 px-8 py-3 font-headline uppercase tracking-wider text-white transition-colors hover:border-white"
           >
-            Diseñar Mi Guante
+            {t('hero.cta2')}
           </a>
         </motion.div>
       </div>

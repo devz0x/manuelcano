@@ -2,8 +2,10 @@
 
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
+import { useI18n } from '@/lib/i18n';
 
 export function PressBar() {
+  const { t } = useI18n();
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: '-50px' });
 
@@ -24,7 +26,7 @@ export function PressBar() {
         className="mx-auto max-w-5xl"
       >
         <p className="mb-8 text-center font-headline text-xs uppercase tracking-[0.3em] text-tobacco-leather/60">
-          Como se ha visto en
+          {t('press.title')}
         </p>
         <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-6">
           {outlets.map((outlet, i) => (

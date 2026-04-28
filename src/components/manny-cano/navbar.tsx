@@ -6,9 +6,7 @@ import {
   User,
   ShoppingBag,
   Menu,
-  X,
   ChevronDown,
-  Diamond,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -26,83 +24,85 @@ import {
 } from '@/components/ui/accordion';
 import { Separator } from '@/components/ui/separator';
 import { useCartStore } from '@/lib/store';
+import { useI18n } from '@/lib/i18n';
+import { MCLogo } from './mc-logo';
 
 /* ------------------------------------------------------------------ */
-/*  Mega Menu Data                                                      */
+/*  Mega Menu Data (uses translation keys)                              */
 /* ------------------------------------------------------------------ */
 
 interface MegaMenuColumn {
-  title: string;
-  links: string[];
+  titleKey: string;
+  linkKeys: string[];
 }
 
 interface MegaMenuData {
-  label: string;
+  labelKey: string;
   columns: MegaMenuColumn[];
 }
 
 const megaMenuData: MegaMenuData[] = [
   {
-    label: 'Guantes',
+    labelKey: 'nav.gloves',
     columns: [
       {
-        title: 'Por Posición',
-        links: ['Infield', 'Outfield', 'Pitcher', 'Primera Base', 'Catcher'],
+        titleKey: 'nav.byPosition',
+        linkKeys: ['nav.infield', 'nav.outfield', 'nav.pitcher', 'nav.firstBase', 'nav.catcherMitt'],
       },
       {
-        title: 'Por Serie',
-        links: ['Profesional', 'Heritage', 'Diamante', 'Cantera'],
+        titleKey: 'nav.bySeries',
+        linkKeys: ['nav.professional', 'nav.heritage', 'nav.diamond', 'nav.cantera'],
       },
     ],
   },
   {
-    label: 'Bates',
+    labelKey: 'nav.bats',
     columns: [
       {
-        title: 'Por Material',
-        links: ['Madera', 'Aluminio', 'Compuesto'],
+        titleKey: 'nav.byMaterial',
+        linkKeys: ['nav.wood', 'nav.aluminum', 'nav.composite'],
       },
       {
-        title: 'Por Certificación',
-        links: ['BBCOR', 'USSSA', 'USA'],
-      },
-    ],
-  },
-  {
-    label: 'Catcher',
-    columns: [
-      { title: 'Equipos Completos', links: ['Serie Profesional', 'Serie Cantera'] },
-      {
-        title: 'Piezas Individuales',
-        links: ['Mascara', 'Pechera', 'Espinilleras', 'Guante de Catcher', 'Mitones'],
+        titleKey: 'nav.byCert',
+        linkKeys: ['nav.bbcor', 'nav.usssa', 'nav.usa'],
       },
     ],
   },
   {
-    label: 'Pelotas',
+    labelKey: 'nav.catcher',
     columns: [
+      { titleKey: 'nav.completeSets', linkKeys: ['nav.proSet', 'nav.canteraSet'] },
       {
-        title: 'Por Uso',
-        links: ['Partido', 'Práctica', 'Softball', 'Entrenamiento'],
-      },
-      { title: 'Por Cantidad', links: ['1 Docena', '3 Docenas', 'Balde'] },
-    ],
-  },
-  {
-    label: 'Mochilas',
-    columns: [
-      {
-        title: 'Por Tipo',
-        links: ['Bat Pack', 'Catcher Bag', 'Roller Bag', 'Mochila de Día', 'Gym Bag'],
+        titleKey: 'nav.individualPieces',
+        linkKeys: ['nav.mask', 'nav.chestProtector', 'nav.legGuards', 'nav.catcherGlove', 'nav.kneeSavers'],
       },
     ],
   },
   {
-    label: 'Accesorios',
+    labelKey: 'nav.balls',
     columns: [
-      { title: 'Bateo', links: ['Batting Gloves', 'Donas', 'Pesos de Bate'] },
-      { title: 'Cuidado', links: ['Aceite de Cuero', 'Condicionador', 'Cepillo'] },
-      { title: 'Vestimenta', links: ['Camisetas', 'Pantalones', 'Sudaderas', ' Gorras'] },
+      {
+        titleKey: 'nav.byUse',
+        linkKeys: ['nav.game', 'nav.practice', 'nav.training'],
+      },
+      { titleKey: 'nav.byQuantity', linkKeys: ['nav.dozen', 'nav.threeDozen', 'nav.bucket'] },
+    ],
+  },
+  {
+    labelKey: 'nav.bags',
+    columns: [
+      {
+        titleKey: 'nav.byType',
+        linkKeys: ['nav.batPack', 'nav.catcherBag', 'nav.rollerBag', 'nav.dayPack', 'nav.gymBag'],
+      },
+    ],
+  },
+  {
+    labelKey: 'nav.accessories',
+    columns: [
+      { titleKey: 'nav.batting', linkKeys: ['nav.battingGloves', 'nav.batWeights'] },
+      { titleKey: 'nav.care', linkKeys: ['nav.leatherOil', 'nav.conditioner', 'nav.brush'] },
+      { titleKey: 'nav.apparel', linkKeys: ['nav.tshirts', 'nav.pants', 'nav.hoodies', 'nav.caps'] },
     ],
   },
 ];
@@ -112,6 +112,7 @@ const megaMenuData: MegaMenuData[] = [
 /* ------------------------------------------------------------------ */
 
 export function Navbar() {
+  const { t } = useI18n();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const menuTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -119,12 +120,12 @@ export function Navbar() {
   const openCart = useCartStore((s) => s.openCart);
 
   /* Hover handlers for mega menu */
-  const handleMouseEnter = useCallback((label: string) => {
+  const handleMouseEnter = useCallback((labelKey: string) => {
     if (menuTimeoutRef.current) {
       clearTimeout(menuTimeoutRef.current);
       menuTimeoutRef.current = null;
     }
-    setActiveMenu(label);
+    setActiveMenu(labelKey);
   }, []);
 
   const handleMouseLeave = useCallback(() => {
@@ -145,9 +146,13 @@ export function Navbar() {
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 lg:px-8">
           {/* Left: Logo */}
           <a href="/" className="flex items-center gap-2 group">
-            <Diamond className="size-6 text-stadium-crimson transition-transform group-hover:rotate-12" />
+            <MCLogo
+              size="md"
+              variant="dark"
+              className="transition-transform group-hover:scale-110"
+            />
             <span className="font-headline text-xl uppercase tracking-wider text-diamond-navy">
-              Manny Cano
+              MANNY CANÓ
             </span>
           </a>
 
@@ -156,46 +161,46 @@ export function Navbar() {
             <ul className="flex items-center gap-1">
               {megaMenuData.map((item) => (
                 <li
-                  key={item.label}
+                  key={item.labelKey}
                   className="relative"
-                  onMouseEnter={() => handleMouseEnter(item.label)}
+                  onMouseEnter={() => handleMouseEnter(item.labelKey)}
                 >
                   <button
                     className="flex items-center gap-1 px-3 py-2 font-headline text-sm uppercase tracking-wide text-dugout-charcoal transition-colors hover:text-stadium-crimson"
                     onClick={() =>
-                      setActiveMenu(activeMenu === item.label ? null : item.label)
+                      setActiveMenu(activeMenu === item.labelKey ? null : item.labelKey)
                     }
                   >
-                    {item.label}
+                    {t(item.labelKey)}
                     <ChevronDown
                       className={`size-3.5 transition-transform duration-200 ${
-                        activeMenu === item.label ? 'rotate-180' : ''
+                        activeMenu === item.labelKey ? 'rotate-180' : ''
                       }`}
                     />
                   </button>
 
                   {/* Mega Menu Panel */}
-                  {activeMenu === item.label && (
+                  {activeMenu === item.labelKey && (
                     <div
                       className="absolute left-1/2 top-full -translate-x-1/2 pt-2"
-                      onMouseEnter={() => handleMouseEnter(item.label)}
+                      onMouseEnter={() => handleMouseEnter(item.labelKey)}
                       onMouseLeave={handleMouseLeave}
                     >
                       <div className="w-[560px] rounded-lg border border-bone-cream bg-white p-6 shadow-xl">
                         <div className="grid grid-cols-2 gap-x-8 gap-y-4">
                           {item.columns.map((col) => (
-                            <div key={col.title}>
+                            <div key={col.titleKey}>
                               <h4 className="mb-2 font-headline text-xs uppercase tracking-widest text-tobacco-leather">
-                                {col.title}
+                                {t(col.titleKey)}
                               </h4>
                               <ul className="space-y-1.5">
-                                {col.links.map((link) => (
-                                  <li key={link}>
+                                {col.linkKeys.map((linkKey) => (
+                                  <li key={linkKey}>
                                     <a
                                       href="#"
                                       className="block text-sm text-dugout-charcoal transition-colors hover:text-stadium-crimson"
                                     >
-                                      {link}
+                                      {t(linkKey)}
                                     </a>
                                   </li>
                                 ))}
@@ -217,7 +222,7 @@ export function Navbar() {
               variant="ghost"
               size="icon"
               className="text-dugout-charcoal hover:text-stadium-crimson"
-              aria-label="Buscar"
+              aria-label={t('mobile.search')}
             >
               <Search className="size-5" />
             </Button>
@@ -226,7 +231,7 @@ export function Navbar() {
               variant="ghost"
               size="icon"
               className="hidden sm:inline-flex text-dugout-charcoal hover:text-stadium-crimson"
-              aria-label="Cuenta"
+              aria-label={t('mobile.account')}
             >
               <User className="size-5" />
             </Button>
@@ -235,7 +240,7 @@ export function Navbar() {
               variant="ghost"
               size="icon"
               className="relative text-dugout-charcoal hover:text-stadium-crimson"
-              aria-label="Carrito"
+              aria-label={t('mobile.cart')}
               onClick={openCart}
             >
               <ShoppingBag className="size-5" />
@@ -251,7 +256,7 @@ export function Navbar() {
               variant="ghost"
               size="icon"
               className="lg:hidden text-dugout-charcoal hover:text-stadium-crimson"
-              aria-label="Menú"
+              aria-label={t('mobile.menu')}
               onClick={() => setMobileMenuOpen(true)}
             >
               <Menu className="size-5" />
@@ -268,9 +273,9 @@ export function Navbar() {
         >
           <SheetHeader className="border-b border-bone-cream px-4 py-4">
             <div className="flex items-center gap-2">
-              <Diamond className="size-5 text-stadium-crimson" />
+              <MCLogo size="sm" variant="dark" />
               <SheetTitle className="font-headline text-lg uppercase tracking-wider text-diamond-navy">
-                Menú
+                {t('mobile.menu')}
               </SheetTitle>
             </div>
           </SheetHeader>
@@ -278,25 +283,25 @@ export function Navbar() {
           <div className="px-4 py-4">
             <Accordion type="single" collapsible className="w-full">
               {megaMenuData.map((item) => (
-                <AccordionItem key={item.label} value={item.label}>
+                <AccordionItem key={item.labelKey} value={item.labelKey}>
                   <AccordionTrigger className="font-headline text-sm uppercase tracking-wide text-dugout-charcoal hover:text-stadium-crimson hover:no-underline">
-                    {item.label}
+                    {t(item.labelKey)}
                   </AccordionTrigger>
                   <AccordionContent>
                     {item.columns.map((col) => (
-                      <div key={col.title} className="mb-3">
+                      <div key={col.titleKey} className="mb-3">
                         <p className="mb-1 text-xs font-semibold uppercase tracking-widest text-tobacco-leather">
-                          {col.title}
+                          {t(col.titleKey)}
                         </p>
                         <ul className="space-y-1.5 pl-1">
-                          {col.links.map((link) => (
-                            <li key={link}>
+                          {col.linkKeys.map((linkKey) => (
+                            <li key={linkKey}>
                               <a
                                 href="#"
                                 className="block text-sm text-dugout-charcoal transition-colors hover:text-stadium-crimson"
                                 onClick={() => setMobileMenuOpen(false)}
                               >
-                                {link}
+                                {t(linkKey)}
                               </a>
                             </li>
                           ))}
@@ -316,14 +321,14 @@ export function Navbar() {
                 className="flex items-center gap-2 text-sm text-dugout-charcoal transition-colors hover:text-stadium-crimson"
               >
                 <User className="size-4" />
-                Mi Cuenta
+                {t('mobile.account')}
               </a>
               <a
                 href="#"
                 className="flex items-center gap-2 text-sm text-dugout-charcoal transition-colors hover:text-stadium-crimson"
               >
                 <Search className="size-4" />
-                Buscar
+                {t('mobile.search')}
               </a>
               <a
                 href="#"
@@ -334,7 +339,7 @@ export function Navbar() {
                 }}
               >
                 <ShoppingBag className="size-4" />
-                Carrito
+                {t('mobile.cart')}
                 {itemCount() > 0 && (
                   <Badge className="bg-stadium-crimson text-white border-0 px-1.5 py-0">
                     {itemCount()}

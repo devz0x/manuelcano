@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { ProductCard } from './product-card';
+import { useI18n } from '@/lib/i18n';
 
 interface Product {
   id: number;
@@ -35,6 +36,7 @@ const itemVariants = {
 };
 
 export function FeaturedProducts() {
+  const { t } = useI18n();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const ref = useRef<HTMLDivElement>(null);
@@ -61,11 +63,10 @@ export function FeaturedProducts() {
         {/* Section Heading */}
         <div className="mb-12 text-center">
           <h2 className="font-display text-4xl font-bold text-diamond-navy">
-            Línea Profesional
+            {t('products.title')}
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-tobacco-leather">
-            Cuero curado a mano. Especificaciones MLB. La misma pieza que
-            confiarías a tu carrera.
+            {t('products.subtitle')}
           </p>
         </div>
 
@@ -124,7 +125,7 @@ export function FeaturedProducts() {
               href="/tienda"
               className="font-headline uppercase tracking-wider text-stadium-crimson underline-offset-4 transition-colors hover:text-stadium-crimson/80 hover:underline"
             >
-              Ver toda la línea
+              {t('products.viewAll')}
             </a>
           </motion.div>
         )}
