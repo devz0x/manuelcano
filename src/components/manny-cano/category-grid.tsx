@@ -1,8 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useI18n } from '@/lib/i18n';
 import { useNavigationStore } from '@/lib/navigation-store';
 
@@ -18,8 +17,6 @@ const categorySlugs = [
 export function CategoryGrid() {
   const { t } = useI18n();
   const navigate = useNavigationStore((s) => s.navigate);
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: '-60px' });
 
   return (
     <section className="bg-bone-cream py-20 md:py-28">
@@ -32,24 +29,14 @@ export function CategoryGrid() {
         </div>
 
         {/* Category Grid */}
-        <motion.div
-          ref={ref}
-          initial="hidden"
-          animate={isInView ? 'visible' : 'hidden'}
-          variants={{
-            hidden: {},
-            visible: { transition: { staggerChildren: 0.08 } },
-          }}
-          className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 lg:gap-5"
-        >
+        <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 lg:gap-5">
           {categorySlugs.map((category, i) => (
             <motion.button
               key={category.nameKey}
               onClick={() => navigate('shop', { category: category.slug })}
-              variants={{
-                hidden: { opacity: 0, y: 20 },
-                visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' as const } },
-              }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: i * 0.08, ease: 'easeOut' as const }}
               className={`group relative cursor-pointer overflow-hidden rounded-lg text-left ${
                 i === 0 || i === 5 ? 'aspect-[4/3]' : 'aspect-square'
               }`}
@@ -74,7 +61,7 @@ export function CategoryGrid() {
               </div>
             </motion.button>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { ProductCard } from './product-card';
 import { useI18n } from '@/lib/i18n';
@@ -24,9 +24,6 @@ export function FeaturedProducts() {
   const navigate = useNavigationStore((s) => s.navigate);
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
-  const ref = useRef<HTMLDivElement>(null);
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: '-80px' });
 
   useEffect(() => {
     async function fetchProducts() {
@@ -52,14 +49,7 @@ export function FeaturedProducts() {
     fetchProducts();
   }, []);
 
-  const scroll = (direction: 'left' | 'right') => {
-    if (!scrollRef.current) return;
-    const scrollAmount = scrollRef.current.offsetWidth * 0.7;
-    scrollRef.current.scrollBy({
-      left: direction === 'left' ? -scrollAmount : scrollAmount,
-      behavior: 'smooth',
-    });
-  };
+
 
   return (
     <section id="productos" className="bg-white py-20 md:py-28">
@@ -107,22 +97,17 @@ export function FeaturedProducts() {
         {/* Products Grid */}
         {!loading && products.length > 0 && (
           <motion.div
-            ref={ref}
-            initial="hidden"
-            animate={isInView ? 'visible' : 'hidden'}
-            variants={{
-              hidden: {},
-              visible: { transition: { staggerChildren: 0.06 } },
-            }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.4 }}
             className="grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-3 lg:grid-cols-4 md:gap-x-5"
           >
-            {products.map((product) => (
+            {products.map((product, i) => (
               <motion.div
                 key={product.id}
-                variants={{
-                  hidden: { opacity: 0, y: 20 },
-                  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' as const } },
-                }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: i * 0.06, ease: 'easeOut' as const }}
               >
                 <ProductCard
                   id={product.id}

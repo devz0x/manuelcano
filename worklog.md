@@ -345,3 +345,72 @@ Stage Summary:
 - All text bilingual (ES/EN) with 9 new translation keys per locale
 - ESLint: 0 errors, 0 warnings
 - Dev server: compiled clean, all routes 200 OK
+
+---
+Task ID: R1+R3+R4+R7
+Agent: Main Orchestrator
+Task: Minimalist redesign - Product cards, Cart drawer, Homepage, Category grid, Hero
+
+Work Log:
+- Redesigned Product Cards: Nike/Aesop style hover quick-add, 4:5 ratio, wishlist heart, discount badge
+- Improved Cart Drawer: free shipping progress bar ($100 threshold), gift promo, cleaner layout
+- Refined Featured Products: white bg, cleaner heading, better View All button
+- Refined Category Grid: varied aspect ratios, lighter overlays
+- Refined Hero Section: Apple-style, no scroll indicator, white primary CTA
+- Streamlined Homepage: removed redundant Equipment Showcase and Tech Strip
+
+Stage Summary:
+- Site follows Nike/Apple/Aesop minimalist design philosophy
+- Product cards premium with hover interactions
+- Cart gamifies free shipping with progress bar
+- Homepage has Apple-like rhythm
+- Pushed to GitHub
+
+---
+Task ID: fix-blank-sections
+Agent: Main Orchestrator
+Task: Fix blank/empty areas on homepage caused by framer-motion isInView visibility bug
+
+Work Log:
+- Diagnosed blank area in "Línea Profesional" (Featured Products) section via VLM screenshot analysis
+- Root cause: framer-motion `useInView` hook with `once: true` and negative margin was preventing product grid from becoming visible
+- Products loaded successfully from API (200), but child motion.div items had `opacity: 0` in their `hidden` variant, which persisted until isInView triggered
+- Fixed FeaturedProducts component: replaced isInView variant pattern with direct mount animations (opacity/y with staggered delays)
+- Fixed CategoryGrid component: same fix, removed isInView dependency
+- Fixed CustomPromo component: same fix, removed isInView dependency  
+- Fixed Testimonials component: same fix, removed isInView dependency
+- Fixed PressBar component: same fix, removed isInView dependency
+- Cleaned up unused imports (useRef, useInView, scrollRef, scroll function)
+- ESLint: 0 errors, 0 warnings
+- Dev server: compiled clean
+
+Stage Summary:
+- All 5 homepage sections now use direct mount animations instead of isInView-variant gating
+- Products and categories are always visible once loaded, regardless of scroll position
+- Animations still provide smooth staggered entrance effects
+- No more blank/empty areas on any homepage section
+
+---
+Task ID: fix-navbar-footer
+Agent: Main Orchestrator
+Task: Fix white-on-white navbar menu and add stamp-style logo to footer
+
+Work Log:
+- Diagnosed navbar issue: `isTransparent` was true on first render (before hero painted), causing white text on white background
+- Fixed navbar: changed initial `scrolled` state from `false` to `true` — navbar starts solid (dark text on white bg), then transitions to transparent after hero loads and scrollY is checked
+- Added `invert={isTransparent}` to navbar MCLogo — logo now appears white/dark depending on navbar state
+- Removed unused `mounted` state/`mountedRef` to pass ESLint react-hooks/set-state-in-effect rule
+- Redesigned footer logo as circular "stamp" seal:
+  - Logo now sits in a circular container (100px mobile, 120px desktop) with cream background and dark border
+  - Positioned with `-mt-10` to overlap the newsletter/footer border
+  - Hover effect: scales up to 110% and border turns gold
+  - Shadow adds depth for stamp impression effect
+  - Footer tagline moved below stamp, centered
+- ESLint: 0 errors, 0 warnings
+- Dev server: compiled clean
+
+Stage Summary:
+- Navbar no longer shows invisible white-on-white text on page load
+- Navbar logo inverts properly when transparent over dark hero
+- Footer logo now appears as a circular "sello" stamp overlapping the newsletter/footer junction
+- Hover on stamp logo: scales up + gold border effect

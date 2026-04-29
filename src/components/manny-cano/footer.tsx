@@ -208,18 +208,30 @@ export function Footer() {
       {/* Newsletter */}
       <NewsletterSection />
 
+      {/* Stamp Logo - overlaps newsletter/footer border */}
+      <div className="relative z-10 flex justify-center">
+        <div className="-mt-10">
+          <button
+            onClick={handleLogoClick}
+            className="group relative flex items-center justify-center transition-transform duration-300 hover:scale-110"
+          >
+            {/* Logo container with circular stamp effect */}
+            <div className="relative flex size-[100px] items-center justify-center rounded-full border-[3px] border-dugout-charcoal/20 bg-bone-cream p-2 shadow-lg transition-all duration-300 group-hover:border-gold-glove/60 group-hover:shadow-xl md:size-[120px]">
+              <div className="flex items-center justify-center overflow-hidden">
+                <MCLogo height={38} />
+              </div>
+            </div>
+          </button>
+        </div>
+      </div>
+
       {/* Main Footer */}
-      <div className="bg-diamond-navy px-6 py-12 lg:py-16">
+      <div className="bg-diamond-navy px-6 pt-8 pb-12 lg:pt-10 lg:pb-16">
         <div className="mx-auto max-w-7xl">
-          {/* Logo + Tagline */}
-          <div className="mb-10 flex flex-col items-center gap-3 text-center md:flex-row md:text-left">
-            <button onClick={handleLogoClick} className="transition-transform hover:scale-105">
-              <MCLogo height={42} invert />
-            </button>
-            <p className="text-sm text-bone-cream/60 md:ml-4">
-              {t('footer.tagline')}
-            </p>
-          </div>
+          {/* Tagline - centered under stamp */}
+          <p className="-mt-2 mb-10 text-center text-sm text-bone-cream/60">
+            {t('footer.tagline')}
+          </p>
 
           {/* 4-column grid */}
           <div className="grid grid-cols-2 gap-8 md:grid-cols-4 md:gap-12">

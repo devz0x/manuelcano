@@ -1,7 +1,6 @@
 'use client';
 
-import { motion, useInView } from 'framer-motion';
-import { useRef } from 'react';
+import { motion } from 'framer-motion';
 import { useI18n } from '@/lib/i18n';
 
 const testimonialKeyMap = [
@@ -10,31 +9,11 @@ const testimonialKeyMap = [
   { quoteKey: 'testimonials.quote3', authorKey: 'testimonials.author3', roleKey: 'testimonials.role3' },
 ];
 
-const containerVariants = {
-  hidden: {},
-  visible: {
-    transition: {
-      staggerChildren: 0.15,
-    },
-  },
-};
-
-const cardVariants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6, ease: 'easeOut' as const },
-  },
-};
-
 export function Testimonials() {
   const { t } = useI18n();
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: '-80px' });
 
   return (
-    <section className="bg-bone-cream py-16 px-6 sm:py-20" ref={ref}>
+    <section className="bg-bone-cream py-16 px-6 sm:py-20">
       <div className="mx-auto max-w-6xl">
         {/* Heading */}
         <h2 className="font-display text-3xl font-bold text-diamond-navy text-center md:text-4xl">
@@ -45,16 +24,13 @@ export function Testimonials() {
         <div className="mx-auto mt-6 h-[2px] w-16 bg-gold-glove" />
 
         {/* Testimonial Cards */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate={isInView ? 'visible' : 'hidden'}
-          className="mt-12 grid grid-cols-1 gap-6 sm:mt-14 md:grid-cols-2 lg:grid-cols-3 lg:gap-8"
-        >
-          {testimonialKeyMap.map((testimonial) => (
+        <div className="mt-12 grid grid-cols-1 gap-6 sm:mt-14 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
+          {testimonialKeyMap.map((testimonial, i) => (
             <motion.div
               key={testimonial.authorKey}
-              variants={cardVariants}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: i * 0.15, ease: 'easeOut' as const }}
               className="rounded-lg bg-white p-8 shadow-sm"
             >
               {/* Quote Mark */}
@@ -81,7 +57,7 @@ export function Testimonials() {
               </p>
             </motion.div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

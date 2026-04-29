@@ -40,7 +40,7 @@ export function MCLogo({
         fill
         className={`object-contain ${
           invert
-            ? 'brightness-0 invert'
+            ? '[filter:invert(1)_brightness(1.2)] mix-blend-screen'
             : ''
         }`}
         priority={false}

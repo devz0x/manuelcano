@@ -1,21 +1,17 @@
 'use client';
 
-import { motion, useInView } from 'framer-motion';
-import { useRef } from 'react';
+import { motion } from 'framer-motion';
 import { useI18n } from '@/lib/i18n';
 import { useNavigationStore } from '@/lib/navigation-store';
 
 export function CustomPromo() {
   const { t } = useI18n();
   const navigate = useNavigationStore((s) => s.navigate);
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: '-100px' });
 
   return (
     <section
       id="custom"
       className="relative flex min-h-[500px] items-center justify-center overflow-hidden"
-      ref={ref}
     >
       {/* Background Image */}
       <div
@@ -31,7 +27,7 @@ export function CustomPromo() {
       {/* Content */}
       <motion.div
         initial={{ opacity: 0, y: 40 }}
-        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: 'easeOut' as const }}
         className="relative z-10 mx-auto max-w-3xl px-6 py-20 text-center"
       >

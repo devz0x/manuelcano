@@ -130,7 +130,6 @@ interface NavbarProps {
 export function Navbar({ onSearchOpen }: NavbarProps) {
   const { t } = useI18n();
   const navigate = useNavigationStore((s) => s.navigate);
-  const view = useNavigationStore((s) => s.view);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
@@ -138,27 +137,15 @@ export function Navbar({ onSearchOpen }: NavbarProps) {
   const itemCount = useCartStore((s) => s.itemCount);
   const openCart = useCartStore((s) => s.openCart);
 
-  const isHome = view === 'home';
-  const isTransparent = isHome && !scrolled;
-
-  /* Scroll listener for transparent-to-solid transition */
+  /* Scroll listener for shadow transition */
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 100);
+      setScrolled(window.scrollY > 10);
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  /* Sync scrolled state with navigation view changes */
-  useEffect(() => {
-    // Scroll listener handles scrolled state; this ensures
-    // we check scroll position after view transitions
-    const check = () => setScrolled(window.scrollY > 100);
-    // Run immediately after the navigation store scrolls to top
-    requestAnimationFrame(check);
-  }, [view]);
 
   /* Hover handlers for mega menu */
   const handleMouseEnter = useCallback((labelKey: string) => {
@@ -194,12 +181,10 @@ export function Navbar({ onSearchOpen }: NavbarProps) {
   return (
     <>
       <nav
-        className={`sticky top-0 z-40 transition-all duration-300 ${
-          isTransparent
-            ? 'bg-transparent'
-            : scrolled
-              ? 'bg-white/95 shadow-sm backdrop-blur-md'
-              : 'bg-white'
+        className={`sticky top-0 z-40 border-b border-bone-cream/50 transition-all duration-300 ${
+          scrolled
+            ? 'bg-white/95 shadow-sm backdrop-blur-md'
+            : 'bg-white'
         }`}
       >
         <div className="mx-auto flex h-[60px] max-w-[1400px] items-center justify-between px-4 lg:px-8">
@@ -221,11 +206,7 @@ export function Navbar({ onSearchOpen }: NavbarProps) {
                   onMouseEnter={() => handleMouseEnter(item.labelKey)}
                 >
                   <button
-                    className={`flex items-center gap-1 px-3 py-2 font-headline text-sm uppercase tracking-wide transition-colors hover:text-stadium-crimson ${
-                      isTransparent
-                        ? 'text-white'
-                        : 'text-dugout-charcoal'
-                    }`}
+                    className="flex items-center gap-1 px-3 py-2 font-headline text-sm uppercase tracking-wide text-dugout-charcoal transition-colors hover:text-stadium-crimson"
                     onClick={() =>
                       setActiveMenu(activeMenu === item.labelKey ? null : item.labelKey)
                     }
@@ -287,9 +268,7 @@ export function Navbar({ onSearchOpen }: NavbarProps) {
             <Button
               variant="ghost"
               size="icon"
-              className={`transition-colors hover:text-stadium-crimson ${
-                isTransparent ? 'text-white' : 'text-dugout-charcoal'
-              }`}
+              className="text-dugout-charcoal transition-colors hover:text-stadium-crimson"
               aria-label={t('mobile.search')}
               onClick={() => onSearchOpen?.()}
             >
@@ -299,9 +278,7 @@ export function Navbar({ onSearchOpen }: NavbarProps) {
             <Button
               variant="ghost"
               size="icon"
-              className={`hidden transition-colors hover:text-stadium-crimson sm:inline-flex ${
-                isTransparent ? 'text-white' : 'text-dugout-charcoal'
-              }`}
+              className="hidden text-dugout-charcoal transition-colors hover:text-stadium-crimson sm:inline-flex"
               aria-label={t('mobile.account')}
             >
               <User className="size-5" />
@@ -310,9 +287,7 @@ export function Navbar({ onSearchOpen }: NavbarProps) {
             <Button
               variant="ghost"
               size="icon"
-              className={`relative transition-colors hover:text-stadium-crimson ${
-                isTransparent ? 'text-white' : 'text-dugout-charcoal'
-              }`}
+              className="relative text-dugout-charcoal transition-colors hover:text-stadium-crimson"
               aria-label={t('mobile.cart')}
               onClick={openCart}
             >
@@ -328,9 +303,7 @@ export function Navbar({ onSearchOpen }: NavbarProps) {
             <Button
               variant="ghost"
               size="icon"
-              className={`lg:hidden transition-colors hover:text-stadium-crimson ${
-                isTransparent ? 'text-white' : 'text-dugout-charcoal'
-              }`}
+              className="lg:hidden text-dugout-charcoal transition-colors hover:text-stadium-crimson"
               aria-label={t('mobile.menu')}
               onClick={() => setMobileMenuOpen(true)}
             >

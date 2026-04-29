@@ -1,13 +1,10 @@
 'use client';
 
-import { motion, useInView } from 'framer-motion';
-import { useRef } from 'react';
+import { motion } from 'framer-motion';
 import { useI18n } from '@/lib/i18n';
 
 export function PressBar() {
   const { t } = useI18n();
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: '-50px' });
 
   const outlets = [
     'ESPN Deportes',
@@ -18,10 +15,10 @@ export function PressBar() {
   ];
 
   return (
-    <section className="border-y border-bone-cream bg-white py-10 px-6" ref={ref}>
+    <section className="border-y border-bone-cream bg-white py-10 px-6">
       <motion.div
         initial={{ opacity: 0 }}
-        animate={isInView ? { opacity: 1 } : { opacity: 0 }}
+        animate={{ opacity: 1 }}
         transition={{ duration: 0.6 }}
         className="mx-auto max-w-5xl"
       >
@@ -33,7 +30,7 @@ export function PressBar() {
             <motion.span
               key={outlet}
               initial={{ opacity: 0, y: 10 }}
-              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: i * 0.1 }}
               className="font-headline text-base uppercase tracking-wider text-dugout-charcoal/30 sm:text-lg"
             >
